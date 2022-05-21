@@ -9,8 +9,9 @@
 - Spring Boot (API Server)
 - Spring Security (Security)
 - Spring Batch (Batch)
+	- 일매출 집계
 - MariaDB (RDB)
-	- ERD : https://dbdiagram.io/d/624c49fdd043196e39fcf65e
+  - ERD : https://dbdiagram.io/d/624c49fdd043196e39fcf65e
 - JPA & QueryDSL (ORM)
 - OAuth2.0 + JWT (login)
 - Redis (Cache)
