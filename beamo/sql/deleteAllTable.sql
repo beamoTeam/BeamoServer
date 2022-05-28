@@ -1,0 +1,12 @@
+SET foreign_key_checks = 0;
+DROP TABLE beamo.basket;
+DROP TABLE beamo.chat_info;
+DROP TABLE beamo.chat_room;
+DROP TABLE beamo.munu;
+DROP TABLE beamo.orders;
+DROP TABLE beamo.owner;
+DROP TABLE beamo.restaurant;
+DROP TABLE beamo.review;
+DROP TABLE beamo.side_munu;
+DROP TABLE beamo.users;
+SET foreign_key_checks = 1;
