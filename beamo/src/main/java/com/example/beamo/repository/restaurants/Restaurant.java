@@ -1,5 +1,6 @@
 package com.example.beamo.repository.restaurants;
 
+import com.example.beamo.repository.restaurants.menu.Menu;
 import lombok.*;
 
 import javax.persistence.*;
