@@ -29,9 +29,5 @@ public class Menu {
 
     private short price;
 
-
-
-
-
     private short count;
 }
