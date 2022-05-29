@@ -10,5 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface MenuRepository extends JpaRepository<Menu, Long> {
+    @Query(value = "select r.menuList FROM Restaurant as r WHERE r.seq=?1")
+    List<Menu> findByRestaurant(Long seq);
 }
 

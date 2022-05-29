@@ -2,6 +2,7 @@ package com.example.beamo.controller.restaurant;
 
 import com.example.beamo.repository.restaurants.Restaurant;
 import com.example.beamo.repository.restaurants.RestaurantRepository;
+import com.example.beamo.repository.restaurants.menu.Menu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

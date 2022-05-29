@@ -1,7 +1,5 @@
 package com.example.beamo.controller.restaurant.menu;
 
-import com.example.beamo.repository.restaurants.Restaurant;
-import com.example.beamo.repository.restaurants.RestaurantRepository;
 import com.example.beamo.repository.restaurants.menu.Menu;
 import com.example.beamo.repository.restaurants.menu.MenuRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Optional;
+import java.util.List;
 
 @Controller
 @RequestMapping(value = "/api/menu" , produces = "application/json")
@@ -21,7 +19,7 @@ public class MenuController {
 
     @GetMapping("/{seq}")
     public ResponseEntity getMenuByR_seq(@PathVariable("seq") Long seq) {
-        Optional<Menu> byId = menuRepository.findById(seq);
+        List<Menu> byId = menuRepository.findByRestaurant(seq);
         return ResponseEntity.ok(byId);
     }
 }
