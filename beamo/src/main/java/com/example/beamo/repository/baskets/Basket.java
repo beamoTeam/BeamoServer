@@ -37,12 +37,22 @@ public class Basket {
     private short count;
     private int total_amount;
 
+    public void addCoount(short inputCount, short inputPrice) {
+        this.count += inputCount;
+        this.total_amount += inputPrice;
+    }
+
     public void calculate() {
-        for (int i =0; i<basketMenuList.size();i++){
-            if(basketMenuList.get(i).getCount()>0) {
-                total_amount += ( (basketMenuList.get(i).getCount()) * (basketMenuList.get(i).getPrice()) );
-                count += basketMenuList.get(i).getCount();
-            }
+        for (BasketMenu basketMenu : this.basketMenuList) {
+            System.out.println(basketMenu);
         }
+
+//        this.count =
+//        for (int i =0; i<basketMenuList.size();i++){
+//            if(basketMenuList.get(i).getCount()>0) {
+//                total_amount += ( (basketMenuList.get(i).getCount()) * (basketMenuList.get(i).getPrice()) );
+//                count += basketMenuList.get(i).getCount();
+//            }
+//        }
     }
 }
