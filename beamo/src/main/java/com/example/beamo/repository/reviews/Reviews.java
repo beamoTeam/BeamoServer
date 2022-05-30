@@ -32,8 +32,8 @@ public class Reviews {
     private float grade;
     private String content;
 
-    @Column(name = "created_dt")
+    @Column(name = "created_dt",updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdDateTime;
-    @Column(name = "updated_dt")
+    @Column(name = "updated_dt", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private LocalDateTime updatedDateTime;
 }

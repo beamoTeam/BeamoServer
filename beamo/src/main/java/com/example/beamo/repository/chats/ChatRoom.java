@@ -1,6 +1,7 @@
 package com.example.beamo.repository.chats;
 
 import com.example.beamo.repository.users.Users;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import javax.persistence.*;
@@ -30,9 +31,11 @@ public class ChatRoom {
 
 
 
-    @Column(name = "created_dt")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @Column(name = "created_dt",updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdDateTime;
-    @Column(name = "updated_dt")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @Column(name = "updated_dt", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private LocalDateTime updatedDateTime;
 }
 
