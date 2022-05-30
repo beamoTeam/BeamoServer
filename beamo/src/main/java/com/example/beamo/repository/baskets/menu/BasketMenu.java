@@ -1,5 +1,6 @@
 package com.example.beamo.repository.baskets.menu;
 
+import com.example.beamo.repository.baskets.Basket;
 import lombok.*;
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -17,11 +18,22 @@ public class BasketMenu {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long seq;
 
-    @OneToMany
-    @JoinColumn(name = "basket_menu_seq")
-    private List<BasketSideMenu> BasketSideMenuList = new ArrayList<>();
+//    @OneToMany
+//    @JoinColumn(name = "basket_menu_seq")
+//    private List<BasketSideMenu> BasketSideMenuList = new ArrayList<>();
+
+    private String category;
+
+    private String name;
+
+    @Column(length = 300)
+    private String img;
 
     private short price;
 
     private short count;
+
+    @ManyToOne
+    @JoinColumn(name = "basket_seq")
+    private Basket basket;
 }

@@ -3,6 +3,7 @@ package com.example.beamo.repository.baskets;
 import com.example.beamo.repository.baskets.menu.BasketMenu;
 import com.example.beamo.repository.chats.ChatRoom;
 import com.example.beamo.repository.restaurants.menu.Menu;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -30,6 +31,7 @@ public class Basket {
 
     @OneToMany
     @JoinColumn(name = "basket_seq")
+    @JsonIgnore
     private List<BasketMenu> basketMenuList = new ArrayList<>();
 
     private short count;

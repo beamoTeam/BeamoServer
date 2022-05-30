@@ -1,6 +1,7 @@
 package com.example.beamo.repository.restaurants;
 
 import com.example.beamo.repository.restaurants.menu.Menu;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,6 +23,7 @@ public class Restaurant {
 
     @OneToMany
     @JoinColumn(name = "restaurant_seq")
+    @JsonIgnore
     private List<Menu> menuList = new ArrayList<>();
 
     private String category;
