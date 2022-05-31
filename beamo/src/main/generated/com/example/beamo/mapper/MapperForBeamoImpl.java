@@ -20,7 +20,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-05-31T20:48:14+0900",
+    date = "2022-05-31T21:29:00+0900",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 11.0.11 (AdoptOpenJDK)"
 )
 public class MapperForBeamoImpl implements MapperForBeamo {
@@ -76,7 +76,6 @@ public class MapperForBeamoImpl implements MapperForBeamo {
         basketDto.chatRoom( basket.getChatRoom() );
         basketDto.seq( basket.getSeq() );
         basketDto.deliveryPrice( basket.getDeliveryPrice() );
-        basketDto.count( basket.getCount() );
         basketDto.total_amount( basket.getTotal_amount() );
 
         return basketDto.build();
@@ -97,7 +96,6 @@ public class MapperForBeamoImpl implements MapperForBeamo {
             basket.basketMenuList( new ArrayList<BasketMenu>( list ) );
         }
         basket.deliveryPrice( basketDto.getDeliveryPrice() );
-        basket.count( basketDto.getCount() );
         basket.total_amount( basketDto.getTotal_amount() );
 
         return basket.build();

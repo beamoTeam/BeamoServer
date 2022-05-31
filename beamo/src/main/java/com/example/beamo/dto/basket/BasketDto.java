@@ -17,13 +17,13 @@ public class BasketDto {
     private ChatRoom chatRoom;
     private final List<BasketMenu> basketMenuList = new ArrayList<>();
     private short deliveryPrice;
-    private short count;
     private int total_amount;
+    private int total_amount_with_delivery = 0;
 
-    public void addCoount(short inputCount, int inputPrice) {
-        this.count += inputCount;
+    public void toTotal(int inputPrice) {
         this.total_amount += inputPrice;
     }
+
     public void addBasMenuLS(List<BasketMenu> ls) {
         this.basketMenuList.addAll(ls);
     }

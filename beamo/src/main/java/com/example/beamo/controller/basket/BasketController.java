@@ -80,16 +80,17 @@ public class BasketController {
         lb.setTotal_amount(0);
         BasketDto basketDto = MapperForBeamo.INSTANCE.basket_To_DTO(lb);
         List<BasketMenu> ls = basketRepository.findBasketMenuByU_seq(seq);
-//        restaurantRepository.findb
+
         basketDto.addBasMenuLS(ls);
         for(BasketMenu bb :ls){
             int price = bb.getCount()*bb.getPrice();
-            basketDto.addCoount(bb.getCount(), price);
+            basketDto.toTotal(price);
         }
 
         short deliveryPrice = restaurantRepository.findById(ls.get(0).getRestaurant_seq()).get().getDeliveryPrice();
         basketDto.setDeliveryPrice((short) 0);
         basketDto.setDeliveryPrice(deliveryPrice);
+        basketDto.setTotal_amount_with_delivery(deliveryPrice+basketDto.getTotal_amount());
 
         lb.setTotal_amount(basketDto.getTotal_amount());
         lb.setDeliveryPrice(basketDto.getDeliveryPrice());

@@ -8,11 +8,14 @@ import com.example.beamo.repository.baskets.menu.BasketMenu;
 import com.example.beamo.repository.restaurants.menu.Menu;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
+import org.mapstruct.control.MappingControl;
 import org.mapstruct.factory.Mappers;
+import org.modelmapper.internal.bytebuddy.implementation.bind.annotation.IgnoreForBinding;
 
 import java.util.List;
 
-@Mapper
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface MapperForBeamo {
 
     MapperForBeamo INSTANCE = Mappers.getMapper(MapperForBeamo.class);

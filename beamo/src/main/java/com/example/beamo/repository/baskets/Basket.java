@@ -35,9 +35,7 @@ public class Basket {
     private List<BasketMenu> basketMenuList = new ArrayList<>();
 
     private short deliveryPrice;
-    private short count;
     private int total_amount;
-
 
     public void calculate() {
         for (BasketMenu basketMenu : this.basketMenuList) {
