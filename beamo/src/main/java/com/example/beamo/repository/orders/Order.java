@@ -38,6 +38,9 @@ public class Order {
     @Column(name = "pay_status")
     private short payStatus;
 
+    @Column(name = "pay_amount")
+    private short payAmount;
+
     @Column(name = "pay_datetime")
     private LocalDateTime payDatetime;
 

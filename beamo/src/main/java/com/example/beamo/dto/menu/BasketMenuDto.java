@@ -9,10 +9,12 @@ import javax.persistence.GenerationType;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BasketMenuDto {
+    private long menu_seq;
     private String category;
     private String name;
     private String img;
     private short price;
     private short count;
+    private Long restaurant_seq;
     private Long basket_seq;
 }

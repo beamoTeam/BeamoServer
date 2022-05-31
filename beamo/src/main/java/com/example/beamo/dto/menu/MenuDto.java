@@ -8,6 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MenuDto {
+    private Long seq;
     private String category;
     private String name;
     private String img;

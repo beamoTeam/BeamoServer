@@ -34,13 +34,10 @@ public class Basket {
     @JsonIgnore
     private List<BasketMenu> basketMenuList = new ArrayList<>();
 
+    private short deliveryPrice;
     private short count;
     private int total_amount;
 
-    public void addCoount(short inputCount, short inputPrice) {
-        this.count += inputCount;
-        this.total_amount += inputPrice;
-    }
 
     public void calculate() {
         for (BasketMenu basketMenu : this.basketMenuList) {

@@ -1,11 +1,14 @@
 package com.example.beamo.dto.restaurant;
 
+import com.example.beamo.repository.restaurants.menu.Menu;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,6 +24,7 @@ public class RestaurantDto {
 
     private short maxMember;
 
+    private List<Menu> menuList = new ArrayList<>();
 
     private int phone;
 

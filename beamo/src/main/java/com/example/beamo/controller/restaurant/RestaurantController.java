@@ -1,5 +1,7 @@
 package com.example.beamo.controller.restaurant;
 
+import com.example.beamo.dto.menu.MenuDto;
+import com.example.beamo.mapper.MapperForBeamo;
 import com.example.beamo.repository.restaurants.Restaurant;
 import com.example.beamo.repository.restaurants.RestaurantRepository;
 import com.example.beamo.repository.restaurants.menu.Menu;
@@ -33,6 +35,7 @@ public class RestaurantController {
     @GetMapping("/{r_seq}/menu")
     public ResponseEntity getMenu(@PathVariable("r_seq") Long seq) {
         List<Menu> byR_Seq = menuRepository.findByRestaurant(seq);
-        return ResponseEntity.ok(byR_Seq);
+        List<MenuDto> dtoList = MapperForBeamo.INSTANCE.menu_To_List_DTO(byR_Seq);
+        return ResponseEntity.ok(dtoList);
     }
 }
