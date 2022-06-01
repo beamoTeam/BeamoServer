@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -60,6 +61,8 @@ public class BasketController {
                 .price(menuDto.getPrice())
                 .count(menuDto.getCount())
                 .basket_seq(basket_seq)
+                .restaurant_seq(menuDto.getRestaurant_seq())("" +
+                "")
                 .build();
         BasketMenu basketMenu = MapperForBeamo.INSTANCE.basketMenu_To_Entity(basketMenuDto);
         BasketMenuDto resultDto;
@@ -82,15 +85,22 @@ public class BasketController {
         List<BasketMenu> ls = basketRepository.findBasketMenuByU_seq(seq);
 
         basketDto.addBasMenuLS(ls);
+        long restaurant_seq = 0;
         for(BasketMenu bb :ls){
             int price = bb.getCount()*bb.getPrice();
             basketDto.toTotal(price);
+            restaurant_seq = bb.getRestaurant_seq();
         }
 
-        short deliveryPrice = restaurantRepository.findById(ls.get(0).getRestaurant_seq()).get().getDeliveryPrice();
-        basketDto.setDeliveryPrice((short) 0);
-        basketDto.setDeliveryPrice(deliveryPrice);
-        basketDto.setTotal_amount_with_delivery(deliveryPrice+basketDto.getTotal_amount());
+        if(ls.isEmpty() ){
+            basketDto.setDeliveryPrice((short) 0);
+        }
+        else {
+            short deliveryPrice = restaurantRepository.findBySeq(restaurant_seq).getDeliveryPrice();
+            basketDto.setDeliveryPrice((short) 0);
+            basketDto.setDeliveryPrice(deliveryPrice);
+            basketDto.setTotal_amount_with_delivery(deliveryPrice+basketDto.getTotal_amount());
+        }
 
         lb.setTotal_amount(basketDto.getTotal_amount());
         lb.setDeliveryPrice(basketDto.getDeliveryPrice());

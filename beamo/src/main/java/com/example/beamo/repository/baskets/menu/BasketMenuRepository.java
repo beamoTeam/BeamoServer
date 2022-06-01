@@ -11,4 +11,6 @@ import java.util.Optional;
 public interface BasketMenuRepository extends JpaRepository<BasketMenu, Long> {
     @Query(value = "select b FROM BasketMenu as b WHERE b.basket.chatRoom.users.seq=?1")
     List<BasketMenu> findByU_seq(Long seq);
+
+
 }
