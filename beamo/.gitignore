@@ -33,9 +33,10 @@ out/
 /nbdist/
 /.nb-gradle/
 
-//DB setiing
-src/main/resources/
-src/main/resources/application.properties
+### DB setiing
+/src/main/resources/
+/src/main/resources/application.properties
 
 ### VS Code ###
 .vscode/
+/src/main/resources/
