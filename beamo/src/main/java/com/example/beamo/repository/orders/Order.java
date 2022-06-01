@@ -3,6 +3,7 @@ package com.example.beamo.repository.orders;
 import com.example.beamo.repository.chats.ChatRoom;
 import com.example.beamo.repository.restaurants.Restaurant;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Setter
 @AllArgsConstructor
 @Table(name = "orders")
 public class Order {
@@ -21,6 +23,7 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "restaurant_seq")
+    @JsonIgnore
     private Restaurant restaurant;
 
     @ManyToOne
@@ -28,6 +31,7 @@ public class Order {
             @JoinColumn(name = "chat_room_seq"),
             @JoinColumn(name = "user_seq")
     })
+    @JsonIgnore
     private ChatRoom chatRoom;
 
     private String payType;
@@ -39,10 +43,14 @@ public class Order {
     private short payStatus;
 
     @Column(name = "pay_amount")
-    private short payAmount;
+    private int payAmount;
 
-    @Column(name = "pay_datetime")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @Column(name = "pay_datetime",updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime payDatetime;
+
+    @Column(name = "total_status")
+    private short totalStatus;
 
     @Column(name = "total_amount")
     private int totalAmount;

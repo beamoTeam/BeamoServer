@@ -6,10 +6,13 @@ import com.example.beamo.dto.menu.BasketMenuDto;
 import com.example.beamo.dto.menu.BasketMenuDto.BasketMenuDtoBuilder;
 import com.example.beamo.dto.menu.MenuDto;
 import com.example.beamo.dto.menu.MenuDto.MenuDtoBuilder;
+import com.example.beamo.dto.order.OrderDto;
 import com.example.beamo.repository.baskets.Basket;
 import com.example.beamo.repository.baskets.Basket.BasketBuilder;
 import com.example.beamo.repository.baskets.menu.BasketMenu;
 import com.example.beamo.repository.baskets.menu.BasketMenu.BasketMenuBuilder;
+import com.example.beamo.repository.orders.Order;
+import com.example.beamo.repository.orders.Order.OrderBuilder;
 import com.example.beamo.repository.restaurants.Restaurant;
 import com.example.beamo.repository.restaurants.Restaurant.RestaurantBuilder;
 import com.example.beamo.repository.restaurants.menu.Menu;
@@ -20,7 +23,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-05-31T21:29:00+0900",
+    date = "2022-06-01T16:01:14+0900",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 11.0.11 (AdoptOpenJDK)"
 )
 public class MapperForBeamoImpl implements MapperForBeamo {
@@ -153,6 +156,28 @@ public class MapperForBeamoImpl implements MapperForBeamo {
         menu.count( menuDto.getCount() );
 
         return menu.build();
+    }
+
+    @Override
+    public OrderDto order_To_DTO(Order order) {
+        if ( order == null ) {
+            return null;
+        }
+
+        OrderDto orderDto = new OrderDto();
+
+        return orderDto;
+    }
+
+    @Override
+    public Order order_To_Entity(OrderDto orderDto) {
+        if ( orderDto == null ) {
+            return null;
+        }
+
+        OrderBuilder order = Order.builder();
+
+        return order.build();
     }
 
     private Long basketMenuBasketSeq(BasketMenu basketMenu) {

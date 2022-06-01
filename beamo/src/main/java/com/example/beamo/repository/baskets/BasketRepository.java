@@ -18,4 +18,8 @@ public interface BasketRepository extends JpaRepository<Basket, Long> {
     @Query(value = "select b from Basket as b WHERE b.seq =?1")
     Basket findB_seqByU_seq(Long seq);
 
+    @Query(value = "select b from Basket as b WHERE b.chatRoom.users.seq =?1")
+    Basket testfindB_seqByU_seq(Long seq);
+
+
 }

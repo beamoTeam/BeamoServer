@@ -83,6 +83,7 @@ public class BasketController {
         BasketDto basketDto = MapperForBeamo.INSTANCE.basket_To_DTO(lb);
         List<BasketMenu> ls = basketRepository.findBasketMenuByU_seq(seq);
 
+
         basketDto.addBasMenuLS(ls);
         long restaurant_seq = 0;
         for(BasketMenu bb :ls){
@@ -107,4 +108,11 @@ public class BasketController {
 
         return ResponseEntity.ok(basketDto);
     }
+    @ApiOperation(value = "채팅방 있는 유저만 가능 유저번호로 바스켓 조회")
+    @GetMapping("/test/{u_seq}")
+    public ResponseEntity U_seqTest(@PathVariable("u_seq") Long seq) {
+        Basket lb = basketRepository.testfindB_seqByU_seq(seq);
+        return ResponseEntity.ok(lb);
+    }
+
 }

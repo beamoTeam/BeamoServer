@@ -3,8 +3,10 @@ package com.example.beamo.mapper;
 import com.example.beamo.dto.basket.BasketDto;
 import com.example.beamo.dto.menu.BasketMenuDto;
 import com.example.beamo.dto.menu.MenuDto;
+import com.example.beamo.dto.order.OrderDto;
 import com.example.beamo.repository.baskets.Basket;
 import com.example.beamo.repository.baskets.menu.BasketMenu;
+import com.example.beamo.repository.orders.Order;
 import com.example.beamo.repository.restaurants.menu.Menu;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -38,4 +40,10 @@ public interface MapperForBeamo {
     List<MenuDto> menu_To_List_DTO(List<Menu> menus);
     @Mapping(target = "restaurant.seq", source = "restaurant_seq")
     Menu menu_To_Entity(MenuDto menuDto);
+
+    //order
+//    @Mapping(target = "restaurant_seq", source = "restaurant.seq")
+    OrderDto order_To_DTO(Order order);
+//    @Mapping(target = "restaurant.seq", source = "restaurant_seq")
+    Order order_To_Entity(OrderDto orderDto);
 }
