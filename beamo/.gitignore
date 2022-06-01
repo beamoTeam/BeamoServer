@@ -34,7 +34,7 @@ out/
 /.nb-gradle/
 
 //DB setiing
-src/main/resources/application.properties
+~/dev_dir/BeamoServer/beamo/src/main/resources/application.properties
 
 ### VS Code ###
 .vscode/
