@@ -34,7 +34,8 @@ out/
 /.nb-gradle/
 
 //DB setiing
-/src/main/resources/application.properties
+src/main/resources/
+src/main/resources/application.properties
 
 ### VS Code ###
 .vscode/
