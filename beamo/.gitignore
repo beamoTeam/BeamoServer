@@ -13,7 +13,6 @@ build/
 .settings
 .springBeans
 .sts4-cache
-.properties
 bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
@@ -35,7 +34,7 @@ out/
 /.nb-gradle/
 
 //DB setiing
-~/dev_dir/BeamoServer/beamo/src/main/resources/application.properties
+/src/main/resources/application.properties
 
 ### VS Code ###
 .vscode/
