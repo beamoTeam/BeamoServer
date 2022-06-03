@@ -45,12 +45,14 @@ public class OrderController {
     }
 
     @ApiOperation(value = "유저번호로 바스켓 내용 그대로 주문 넣기")
-    @PostMapping("{u_seq}")
-    public ResponseEntity orderByU_seq(@PathVariable("u_seq") Long seq) {
+    @PostMapping("/{u_seq}/{c_seq}")
+    public ResponseEntity orderByU_seq(@PathVariable("u_seq") Long u_seq, @PathVariable("c_seq") Long c_seq) {
 
-        Basket basket = basketRepository.findB_seqByU_seq(seq);
+        ChatRoom chatRoom = chatRoomRepository.findByU_seqAndC_I_Seq(u_seq, c_seq);
+        Basket basket = basketRepository.findByChatRoom(chatRoom);
 
-        ChatRoom chatRoom = chatRoomRepository.findByU_seq(seq);
+
+        Restaurant restaurant = restaurantRepository.findBySeq(chatRoom.getChatInfo().getRestaurant().getSeq());
 
         if (basket == null) {
             return ResponseEntity.badRequest().body("장바구니가 비어있습니다.");
@@ -63,7 +65,7 @@ public class OrderController {
                 .chatRoom(chatRoom)
                 .payStatus((short) 1)
                 .totalStatus((short) 0)
-                .restaurant(chatRoom.getRestaurant())
+                .restaurant(restaurant)
                 .build();
 
         orderRepository.save(order);
@@ -87,11 +89,18 @@ public class OrderController {
             }
         }
         if (count >= 2){
+            int totalPrice = 0;
+            for( Order tmp : ls) {
+                totalPrice += tmp.getPayAmount();
+            }
             for( Order tmp : ls) {
                 tmp.setTotalStatus((short) 1);
+                tmp.setTotalAmount(totalPrice);
             }
             orderRepository.saveAll(ls);
-            return ResponseEntity.ok().body("정상 주문 되었습니다.");
+
+            return ResponseEntity.ok(ls);
+
         }
         else {
             return ResponseEntity.ok().body("주문 가능한 상태가 아님니다. 정상적으로 주문되지 않았습니다. 주문을 확인해주세요.");

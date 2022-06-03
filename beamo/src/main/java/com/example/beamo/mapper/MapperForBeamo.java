@@ -1,11 +1,13 @@
 package com.example.beamo.mapper;
 
 import com.example.beamo.dto.basket.BasketDto;
+import com.example.beamo.dto.chat.ChatRoomDto;
 import com.example.beamo.dto.menu.BasketMenuDto;
 import com.example.beamo.dto.menu.MenuDto;
 import com.example.beamo.dto.order.OrderDto;
 import com.example.beamo.repository.baskets.Basket;
 import com.example.beamo.repository.baskets.menu.BasketMenu;
+import com.example.beamo.repository.chats.ChatRoom;
 import com.example.beamo.repository.orders.Order;
 import com.example.beamo.repository.restaurants.menu.Menu;
 import org.mapstruct.Mapper;
@@ -40,10 +42,20 @@ public interface MapperForBeamo {
     List<MenuDto> menu_To_List_DTO(List<Menu> menus);
     @Mapping(target = "restaurant.seq", source = "restaurant_seq")
     Menu menu_To_Entity(MenuDto menuDto);
-
-    //order
+   //order
 //    @Mapping(target = "restaurant_seq", source = "restaurant.seq")
     OrderDto order_To_DTO(Order order);
 //    @Mapping(target = "restaurant.seq", source = "restaurant_seq")
     Order order_To_Entity(OrderDto orderDto);
+
+    //ChatRoom
+//    @Mapping(target = "chat_info_seq", source = "chatInfo.seq")
+//    @Mapping(target = "users_seq", source = "users.seq")
+//    ChatRoomDto chatRoom_To_Dto(ChatRoom chatRoom);
+//    @Mapping(target = "chatInfo.seq", source = "chat_info_seq")
+//    @Mapping(target = "users.seq", source = "users_seq")
+//    ChatRoom chatRoom_ToEntity(ChatRoomDto chatRoomDto);
+
+    //User
+
 }

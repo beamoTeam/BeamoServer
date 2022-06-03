@@ -8,6 +8,8 @@ import com.example.beamo.repository.baskets.Basket;
 import com.example.beamo.repository.baskets.BasketRepository;
 import com.example.beamo.repository.baskets.menu.BasketMenu;
 import com.example.beamo.repository.baskets.menu.BasketMenuRepository;
+import com.example.beamo.repository.chats.ChatRoom;
+import com.example.beamo.repository.chats.ChatRoomRepository;
 import com.example.beamo.repository.restaurants.RestaurantRepository;
 import com.example.beamo.repository.restaurants.menu.MenuRepository;
 import io.swagger.annotations.ApiOperation;
@@ -38,6 +40,9 @@ public class BasketController {
     @Autowired
     MenuRepository menuRepository;
 
+    @Autowired
+    ChatRoomRepository chatRoomRepository;
+
     MapperForBeamo mapperForBeamo;
 
 //    @ApiOperation(value = "유저번호로 바스켓 내에 있는 메뉴 조회")
@@ -47,11 +52,15 @@ public class BasketController {
 //        return ResponseEntity.ok(anser);
 //    }
 
-    @ApiOperation(value = "유저번호로 바스켓 내에 있는 메뉴 넣기")
-    @PostMapping("/{u_seq}/menu")
-    public ResponseEntity testMenuDto(@PathVariable("u_seq") Long seq,
-                                      @RequestBody @NotNull MenuDto menuDto) {
-        Long basket_seq = basketRepository.findById(seq).get().getSeq();
+    @ApiOperation(value = "유저번호로 바스켓에 메뉴 넣기")
+    @PostMapping("/{u_seq}/{c_seq}")
+    public ResponseEntity putMenuToBasket(@PathVariable("u_seq") Long u_seq, @PathVariable("c_seq") Long c_seq,
+                                          @RequestBody @NotNull MenuDto menuDto) {
+
+        ChatRoom chatRoom = chatRoomRepository.findByU_seqAndC_I_Seq(u_seq, c_seq);
+        Basket lb = basketRepository.findByChatRoom(chatRoom);
+
+        Long basket_seq = lb.getSeq();
 
         BasketMenuDto basketMenuDto = BasketMenuDto.builder()
                 .menu_seq(menuDto.getSeq())
@@ -70,22 +79,25 @@ public class BasketController {
             resultDto = MapperForBeamo.INSTANCE.basketMenu_To_DTO(basketMenu);
         }
         catch (Exception e) {
-            resultDto = null;
+            return ResponseEntity.badRequest().body("바구니에 담기지 않았습니다. 다시 확인해주세요.");
         }
         return ResponseEntity.ok(resultDto);
     }
 
     @ApiOperation(value = "유저번호로 바스켓 조회")
-    @GetMapping("/{u_seq}")
-    public ResponseEntity getBasketByU_seq(@PathVariable("u_seq") Long seq) {
-        Basket lb = basketRepository.findB_seqByU_seq(seq);
+    @GetMapping("/{u_seq}/{c_seq}")
+    public ResponseEntity getBasketByU_seq(@PathVariable("u_seq") Long u_seq, @PathVariable("c_seq") Long c_seq) {
+        ChatRoom chatRoom = chatRoomRepository.findByU_seqAndC_I_Seq(u_seq, c_seq);
+        Basket lb = basketRepository.findByChatRoom(chatRoom);
+
         lb.setTotal_amount(0);
         BasketDto basketDto = MapperForBeamo.INSTANCE.basket_To_DTO(lb);
-        List<BasketMenu> ls = basketRepository.findBasketMenuByU_seq(seq);
-
+        List<BasketMenu> ls = basketRepository.findBasketMenuByU_seq(chatRoom);
 
         basketDto.addBasMenuLS(ls);
+
         long restaurant_seq = 0;
+
         for(BasketMenu bb :ls){
             int price = bb.getCount()*bb.getPrice();
             basketDto.toTotal(price);
@@ -107,12 +119,6 @@ public class BasketController {
         basketRepository.save(lb);
 
         return ResponseEntity.ok(basketDto);
-    }
-    @ApiOperation(value = "채팅방 있는 유저만 가능 유저번호로 바스켓 조회")
-    @GetMapping("/test/{u_seq}")
-    public ResponseEntity U_seqTest(@PathVariable("u_seq") Long seq) {
-        Basket lb = basketRepository.testfindB_seqByU_seq(seq);
-        return ResponseEntity.ok(lb);
     }
 
 }

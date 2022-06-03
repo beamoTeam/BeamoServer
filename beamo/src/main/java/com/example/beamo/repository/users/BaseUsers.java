@@ -8,15 +8,9 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
-@Getter
+
 @MappedSuperclass
 public class BaseUsers {
-    @Id
-    @Column(nullable = false)
-    private long seq;
 
     private String name;
 

@@ -3,53 +3,36 @@ package com.example.beamo.repository.chats;
 import com.example.beamo.repository.restaurants.Restaurant;
 import com.example.beamo.repository.users.Users;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 
-@Data
 @Entity
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Setter
 @AllArgsConstructor
-@Table(name = "chat_room")
 @IdClass(ChatRoomId.class)
-public class ChatRoom {
+@Table(name = "chat_room")
+public class ChatRoom implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long seq;
+    private Long seq;
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "user_seq")
+    @JoinColumn(name = "users_seq")
+    @JsonIgnore
     private Users users;
 
     @OneToOne
-    @JoinColumn(name = "restaurant_seq")
-    private Restaurant restaurant;
-
-
-    private String name;
-
-    private String address;
-
-    private DecimalFormat latitude;
-    private DecimalFormat longitude;
-    private short maxPersonnel;
-
-
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @Column(name = "order_time")
-    private LocalDateTime orderTime;    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @Column(name = "created_dt",updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private LocalDateTime createdDateTime;
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @Column(name = "updated_dt", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
-    private LocalDateTime updatedDateTime;
-
+    @JoinColumn(name = "chat_info_seq")
+    @JsonIgnore
+    private ChatInfo chatInfo;
 }
 
 
