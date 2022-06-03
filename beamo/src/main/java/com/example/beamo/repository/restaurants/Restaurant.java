@@ -43,7 +43,7 @@ public class Restaurant {
 
     private int phone;
 
-    private String adress;
+    private String address;
 
     private DecimalFormat latitude;
     private DecimalFormat longitude;

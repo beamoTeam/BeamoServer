@@ -23,7 +23,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-06-03T17:52:31+0900",
+    date = "2022-06-03T20:39:31+0900",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 11.0.11 (AdoptOpenJDK)"
 )
 public class MapperForBeamoImpl implements MapperForBeamo {

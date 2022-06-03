@@ -16,6 +16,9 @@ import java.util.List;
 @Table(name = "basket_munu")
 public class BasketMenu {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long seq;
+
     private long menu_seq;
 
 //    @OneToMany

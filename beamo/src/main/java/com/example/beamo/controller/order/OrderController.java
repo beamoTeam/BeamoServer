@@ -1,7 +1,11 @@
 package com.example.beamo.controller.order;
 
+import com.example.beamo.dto.order.OrderInfoDto;
+import com.example.beamo.dto.order.OrderMenuListDto;
 import com.example.beamo.repository.baskets.Basket;
 import com.example.beamo.repository.baskets.BasketRepository;
+import com.example.beamo.repository.baskets.menu.BasketMenu;
+import com.example.beamo.repository.baskets.menu.BasketMenuRepository;
 import com.example.beamo.repository.chats.ChatRoom;
 import com.example.beamo.repository.chats.ChatRoomRepository;
 import com.example.beamo.repository.orders.Order;
@@ -9,9 +13,7 @@ import com.example.beamo.repository.orders.OrderRepository;
 import com.example.beamo.repository.restaurants.Restaurant;
 import com.example.beamo.repository.restaurants.RestaurantRepository;
 import io.swagger.annotations.ApiOperation;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,10 +41,13 @@ public class OrderController {
     @Autowired
     ChatRoomRepository chatRoomRepository;
 
+    @Autowired
+    BasketMenuRepository basketMenuRepository;
+
     @ApiOperation(value = "유저번호로 주문 조회")
     @GetMapping("{u_seq}")
     public ResponseEntity getOrderByU_seq(@PathVariable("u_seq") Long seq) {
-        return ResponseEntity.ok(orderRepository.findByU_seq(seq));
+        return ResponseEntity.ok(orderRepository.findListByU_seq(seq));
     }
 
     @ApiOperation(value = "유저번호로 바스켓 내용 그대로 주문 넣기")
@@ -79,27 +85,61 @@ public class OrderController {
 
         List<Order> ls = orderRepository.findListByC_seq(seq);
 
+        Restaurant restaurant = Restaurant.builder().build();
+        LocalDateTime payDatetime = null;
+        String address = "";
+
+        OrderInfoDto orderInfoDto = new OrderInfoDto();
+        List<OrderInfoDto> oil = new ArrayList<>();
+        List<BasketMenu> bml = new ArrayList<>();
+
+        List<Long> list = new ArrayList<>();
+        List<String> nameList = new ArrayList<>();
+
         int count = 0;
+        int totalPrice = 0;
+
+
         for( Order tmp : ls) {
             if(tmp.getPayStatus() == 1){
                 count++;
             }
-            if(tmp.getTotalStatus() == 1){
-                return ResponseEntity.ok().body("주문 가능한 상태가 아님니다. 주문을 확인해주세요.");
-            }
+//            if(tmp.getTotalStatus() == 1){
+//                return ResponseEntity.ok().body("주문 가능한 상태가 아님니다. 주문을 확인해주세요.");
+//            }
         }
-        if (count >= 2){
-            int totalPrice = 0;
+        if (count >= 0){
             for( Order tmp : ls) {
                 totalPrice += tmp.getPayAmount();
             }
             for( Order tmp : ls) {
                 tmp.setTotalStatus((short) 1);
                 tmp.setTotalAmount(totalPrice);
+                restaurant = tmp.getRestaurant();
+                payDatetime = tmp.getUpdatedDateTime();
+                address = tmp.getChatRoom().getChatInfo().getAddress();
             }
-            orderRepository.saveAll(ls);
+            List<Order> savedOrders = orderRepository.saveAll(ls);
 
-            return ResponseEntity.ok(ls);
+
+
+            for( Order tmp : ls) {
+                nameList.add(tmp.getChatRoom().getUsers().getName());
+                list.add(tmp.getChatRoom().getUsers().getSeq());
+            }
+
+            for( long i = 0 ; i<list.size() ; i++) {
+                bml = basketMenuRepository.findMLUC(list.get((int) i),seq);
+                oil.add( orderInfoDto.addInfo( nameList.get((int) i), bml, true) );
+            }
+            OrderMenuListDto oml = OrderMenuListDto.builder()
+                    .restaurantName(restaurant.getName())
+                    .totalAmount(totalPrice)
+                    .payDatetime(payDatetime)
+                    .UserOrderList(oil)
+                    .address(address)
+                    .build();
+            return ResponseEntity.ok(oml);
 
         }
         else {
@@ -111,16 +151,58 @@ public class OrderController {
     @GetMapping("/restaurant/{r_seq}")
     public ResponseEntity getOrderByR_seq(@PathVariable("r_seq") Long seq) {
 
-        List<Order> ls = orderRepository.findListByR_seq(seq);
+        List<OrderMenuListDto> omlList = new ArrayList<>();
 
-        List<Order> answer = new ArrayList<>();
-        
-        for( Order tmp : ls) {
-            if(tmp.getTotalStatus() == 1){
-                answer.add(tmp);
+        Restaurant restaurant = Restaurant.builder().build();
+        LocalDateTime payDatetime = null;
+        String address = "";
+
+        OrderInfoDto orderInfoDto = new OrderInfoDto();
+        List<OrderInfoDto> oil = new ArrayList<>();
+        List<BasketMenu> bml = new ArrayList<>();
+
+        List<Long> list = new ArrayList<>();
+        List<String> nameList = new ArrayList<>();
+
+        int count = 0;
+        int totalPrice = 0;
+
+        List<ChatRoom> cls = orderRepository.findChatRoomByR_seq(seq);
+
+        for(ChatRoom crtmp : cls) {
+
+            List<Order> ls = orderRepository.findListByC_seq(crtmp.getSeq());
+
+            for( Order tmp : ls) {
+                totalPrice += tmp.getPayAmount();
             }
+            for( Order tmp : ls) {
+                tmp.setTotalStatus((short) 1);
+                tmp.setTotalAmount(totalPrice);
+                restaurant = tmp.getRestaurant();
+                payDatetime = tmp.getUpdatedDateTime();
+                address = tmp.getChatRoom().getChatInfo().getAddress();
+            }
+            List<Order> savedOrders = orderRepository.saveAll(ls);
+
+            for( Order tmp : ls) {
+                nameList.add(tmp.getChatRoom().getUsers().getName());
+                list.add(tmp.getChatRoom().getUsers().getSeq());
+            }
+
+            for( long i = 0 ; i<list.size() ; i++) {
+                bml = basketMenuRepository.findMLUC(list.get((int) i),seq);
+                oil.add( orderInfoDto.addInfo( nameList.get((int) i), bml, true) );
+            }
+            OrderMenuListDto oml = OrderMenuListDto.builder()
+                    .restaurantName(restaurant.getName())
+                    .totalAmount(totalPrice)
+                    .payDatetime(payDatetime)
+                    .UserOrderList(oil)
+                    .address(address)
+                    .build();
+            omlList.add(oml);
         }
-        
-        return ResponseEntity.ok(answer);
+        return ResponseEntity.ok(omlList);
     }
 }
