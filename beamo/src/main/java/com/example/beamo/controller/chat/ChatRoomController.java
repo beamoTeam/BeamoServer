@@ -1,12 +1,14 @@
 package com.example.beamo.controller.chat;
 
 import com.example.beamo.dto.chat.ChatInfoDto;
-import com.example.beamo.dto.chat.ChatRoomDto;
 import com.example.beamo.dto.menu.MenuDto;
 import com.example.beamo.mapper.MapperForBeamo;
 import com.example.beamo.repository.baskets.Basket;
 import com.example.beamo.repository.baskets.BasketRepository;
-import com.example.beamo.repository.chats.*;
+import com.example.beamo.repository.chats.ChatInfo;
+import com.example.beamo.repository.chats.ChatInfoRepository;
+import com.example.beamo.repository.chats.ChatRoom;
+import com.example.beamo.repository.chats.ChatRoomRepository;
 import com.example.beamo.repository.restaurants.Restaurant;
 import com.example.beamo.repository.restaurants.RestaurantRepository;
 import com.example.beamo.repository.restaurants.menu.Menu;
@@ -17,12 +19,9 @@ import io.swagger.annotations.ApiOperation;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/api/chatroom" , produces = "application/json")
@@ -79,9 +78,10 @@ public class ChatRoomController {
             basketRepository.save(basket);
 
 
-            List<Menu> byR_Seq = menuRepository.findByRestaurant(restaurant.getSeq());
-            List<MenuDto> menuList = MapperForBeamo.INSTANCE.menu_To_List_DTO(byR_Seq);
-            return ResponseEntity.ok(menuList);
+//            List<Menu> byR_Seq = menuRepository.findByRestaurant(restaurant.getSeq());
+//            List<MenuDto> menuList = MapperForBeamo.INSTANCE.menu_To_List_DTO(byR_Seq);
+
+            return ResponseEntity.ok(findCI);
         }
     }
 

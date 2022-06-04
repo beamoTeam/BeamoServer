@@ -20,7 +20,7 @@
 //@Table(name = "chat_orders")
 //public class ChatOrder {
 //    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = rGenerationType.IDENTITY)
 //    private long seq;
 //
 //    @OneToMany

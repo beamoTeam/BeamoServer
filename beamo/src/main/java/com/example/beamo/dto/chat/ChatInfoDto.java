@@ -1,6 +1,7 @@
 package com.example.beamo.dto.chat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import java.text.DecimalFormat;
@@ -18,6 +19,7 @@ public class ChatInfoDto {
 //    private DecimalFormat latitude;
 //    private DecimalFormat longitude;
     private short maxPersonnel;
+    @ApiModelProperty(example = "2022-06-04 20:00")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime orderTime;
     private long restaurant_seq;
