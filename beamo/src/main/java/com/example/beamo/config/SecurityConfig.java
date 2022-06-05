@@ -29,37 +29,19 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
-//    @Bean
-//    public CorsFilter corsFilter() {
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        CorsConfiguration config = new CorsConfiguration();
-//        config.setAllowCredentials(true);
-//        config.addAllowedOrigin("*");  // 와일드 카드로 처리 ("http://localhost:8080" 으로 지정가능)
-//        config.addAllowedHeader("*");
-//        config.addExposedHeader(HttpHeaders.AUTHORIZATION);
-//        config.addAllowedMethod("*");
-//        source.registerCorsConfiguration("/**", config);
-//        return new CorsFilter(source);
-//    }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.headers().frameOptions().disable();
         http
                 .cors()
-//                .and()
-//                .csrf().disable().authorizeRequests()
-//                .antMatchers("/").permitAll()
-//                .antMatchers("/**").permitAll()
-//                .antMatchers("/api/**").permitAll()
-//                .anyRequest().authenticated()
+                .and()
+                .csrf().disable().authorizeRequests()
+                .antMatchers("/").permitAll()
+                .antMatchers("/**").permitAll()
+                .antMatchers("/api/**").permitAll()
+                .anyRequest().authenticated()
         ;
-        // And filter other requests to check the presence of JWT in header
-        //.addFilterBefore(new JWTAuthenticationFilter(),
-        //       UsernamePasswordAuthenticationFilter.class);
     }
-
-
 
         @Bean
         public CorsConfigurationSource corsConfigurationSource() {
