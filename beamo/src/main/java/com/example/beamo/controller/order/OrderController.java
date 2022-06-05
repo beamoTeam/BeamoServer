@@ -99,7 +99,6 @@ public class OrderController {
         int count = 0;
         int totalPrice = 0;
 
-
         for( Order tmp : ls) {
             if(tmp.getPayStatus() == 1){
                 count++;
@@ -121,8 +120,6 @@ public class OrderController {
             }
             List<Order> savedOrders = orderRepository.saveAll(ls);
 
-
-
             for( Order tmp : ls) {
                 nameList.add(tmp.getChatRoom().getUsers().getName());
                 list.add(tmp.getChatRoom().getUsers().getSeq());
@@ -140,7 +137,6 @@ public class OrderController {
                     .address(address)
                     .build();
             return ResponseEntity.ok(oml);
-
         }
         else {
             return ResponseEntity.ok().body("주문 가능한 상태가 아님니다. 정상적으로 주문되지 않았습니다. 주문을 확인해주세요.");
