@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -63,7 +64,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new CorsFilter(source);
     }
 
-
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.headers().frameOptions().disable();
+        http
+                .cors()
+                .and()
+                .csrf().disable().authorizeRequests()
+                .antMatchers("/").permitAll()
+                .antMatchers("/**").permitAll()
+                .antMatchers("/api/**").permitAll()
+                .anyRequest().authenticated()
+        ;
+        // And filter other requests to check the presence of JWT in header
+        //.addFilterBefore(new JWTAuthenticationFilter(),
+        //       UsernamePasswordAuthenticationFilter.class);
+    }
 
 
     @Bean
