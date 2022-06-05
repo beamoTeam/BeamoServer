@@ -31,7 +31,6 @@ public class ChatRoom implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "chat_info_seq")
-    @JsonIgnore
     private ChatInfo chatInfo;
 }
 

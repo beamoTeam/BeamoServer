@@ -21,6 +21,7 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, ChatRoomId> 
     @Query(value = "select c FROM ChatRoom as c WHERE c.users.seq=?1 and c.chatInfo.seq=?2")
     ChatRoom findByU_seqAndC_I_Seq(Long u, Long c_i);
 
+
     @Query( value = "select c from ChatRoom as c where c.seq=?1")
     List<ChatRoom> findByC_seq(Long seq);
 
