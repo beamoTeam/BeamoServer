@@ -57,25 +57,30 @@ public class OrderController {
         ChatRoom chatRoom = chatRoomRepository.findByU_seqAndC_I_Seq(u_seq, c_seq);
         Basket basket = basketRepository.findByChatRoom(chatRoom);
 
-
         Restaurant restaurant = restaurantRepository.findBySeq(chatRoom.getChatInfo().getRestaurant().getSeq());
 
         if (basket == null) {
             return ResponseEntity.badRequest().body("장바구니가 비어있습니다.");
         }
         else {
+            if(orderRepository.findByChatRoom(chatRoom) == null) {
 
-        Order order = Order.builder()
-                .payAmount(basket.getTotal_amount())
-                .payType("포인트")
-                .chatRoom(chatRoom)
-                .payStatus((short) 1)
-                .totalStatus((short) 0)
-                .restaurant(restaurant)
-                .build();
+                Order order = Order.builder()
+                        .payAmount(basket.getTotal_amount())
+                        .payType("포인트")
+                        .chatRoom(chatRoom)
+                        .payStatus((short) 1)
+                        .totalStatus((short) 0)
+                        .restaurant(restaurant)
+                        .build();
 
-        orderRepository.save(order);
-            return ResponseEntity.ok(order);
+                orderRepository.save(order);
+
+                return ResponseEntity.ok(order);
+            }
+
+            return ResponseEntity.ok().body("이미 결제되었습니다. 다시 확인하세요.");
+
         }
     }
 
