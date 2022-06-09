@@ -92,6 +92,7 @@ public class OrderController {
         OrderInfoDto orderInfoDto = new OrderInfoDto();
         List<OrderInfoDto> oil = new ArrayList<>();
         List<BasketMenu> bml = new ArrayList<>();
+        List<OrderMenuListDto> omlList = new ArrayList<>();
 
         List<Long> list = new ArrayList<>();
         List<String> nameList = new ArrayList<>();
@@ -136,7 +137,10 @@ public class OrderController {
                     .UserOrderList(oil)
                     .address(address)
                     .build();
-            return ResponseEntity.ok(oml);
+
+            omlList.add(oml);
+
+            return ResponseEntity.ok(omlList);
         }
         else {
             return ResponseEntity.ok().body("주문 가능한 상태가 아님니다. 정상적으로 주문되지 않았습니다. 주문을 확인해주세요.");

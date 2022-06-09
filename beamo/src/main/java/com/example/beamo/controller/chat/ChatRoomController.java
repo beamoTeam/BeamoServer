@@ -98,9 +98,9 @@ public class ChatRoomController {
             }
 
             chatRoomRepository.saveComposite_Primary_Keys(u_seq, c_seq);
-
+            ChatRoom cr = chatRoomRepository.findByU_seqAndC_I_Seq(u_seq, c_seq);
             Basket basket = Basket.builder()
-                    .chatRoom(chatRoom)
+                    .chatRoom(cr)
                     .build();
             basketRepository.save(basket);
 
