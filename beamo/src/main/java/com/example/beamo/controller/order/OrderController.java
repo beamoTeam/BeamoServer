@@ -109,9 +109,9 @@ public class OrderController {
             if(tmp.getPayStatus() == 1){
                 count++;
             }
-            if(tmp.getTotalStatus() == 1){
-                return ResponseEntity.ok().body("주문 가능한 상태가 아님니다. 주문을 확인해주세요.");
-            }
+//            if(tmp.getTotalStatus() == 1){
+//                return ResponseEntity.ok().body("주문 가능한 상태가 아님니다. 주문을 확인해주세요.");
+//            }
         }
         if (count >= 2){
             for( Order tmp : ls) {
