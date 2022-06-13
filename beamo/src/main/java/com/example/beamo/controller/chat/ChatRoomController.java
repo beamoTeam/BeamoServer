@@ -108,6 +108,6 @@ public class ChatRoomController {
             return ResponseEntity.ok(chatInfoRepository.findBySeq(c_seq));
         }
         else
-            return ResponseEntity.badRequest().body("잘못된 접근입니다");
+            return ResponseEntity.ok(chatInfoRepository.findBySeq(c_seq));
     }
 }
