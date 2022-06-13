@@ -62,7 +62,7 @@ public class ChatRoomController {
                     .address(chatInfoDto.getAddress())
                     .detail_address(chatInfoDto.getDetail_address())
                     .maxPersonnel(chatInfoDto.getMaxPersonnel())
-                    .name(chatInfoDto.getDetail_address()+" - "+chatInfoDto.getRestaurant_seq())
+                    .name(restaurant.getName() +" - "+chatInfoDto.getDetail_address())
                     .orderTime(chatInfoDto.getOrderTime())
                     .restaurant(restaurant)
                     .build();
