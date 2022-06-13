@@ -15,6 +15,7 @@ import com.example.beamo.repository.users.UsersRepository;
 import io.swagger.annotations.ApiOperation;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,7 +47,7 @@ public class ChatRoomController {
     @ApiOperation(value = "모든 방 조회")
     @GetMapping
     public ResponseEntity getAllRoom() {
-        return ResponseEntity.ok(chatInfoRepository.findAll());
+        return ResponseEntity.ok(chatInfoRepository.findAll(Sort.by(Sort.Direction.DESC, "seq")));
     }
 
     @ApiOperation(value = "유저번호로 방 만들기")

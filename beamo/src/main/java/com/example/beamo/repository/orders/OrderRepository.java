@@ -33,4 +33,5 @@ public interface OrderRepository extends JpaRepository <Order, Long> {
     @Query(value = "select b from Order as b WHERE b.chatRoom=?1")
     Order findByChatRoom(ChatRoom chatRoom);
 
+
 }
