@@ -72,7 +72,6 @@ public class ChatRoomController {
 
             chatRoomRepository.saveComposite_Primary_Keys(seq, c_i_seq);
 
-
             ChatRoom chatRoom = chatRoomRepository.findByU_seqAndC_I_Seq(seq, c_i_seq);
             Basket basket = Basket.builder()
                     .chatRoom(chatRoom)
@@ -107,6 +106,7 @@ public class ChatRoomController {
 
             return ResponseEntity.ok(chatInfoRepository.findBySeq(c_seq));
         }
-        return ResponseEntity.ok(chatRoom);
+        else
+            return ResponseEntity.badRequest().body("잘못된 접근입니다");
     }
 }
