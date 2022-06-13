@@ -14,8 +14,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChatInfoDto {
-    private String name;
+//    private String name;
     private String address;
+    private String detail_address;
 //    private DecimalFormat latitude;
 //    private DecimalFormat longitude;
     private short maxPersonnel;

@@ -27,6 +27,7 @@ public class ChatInfo {
     private String name;
 
     private String address;
+    private String detail_address;
 
     private DecimalFormat latitude;
     private DecimalFormat longitude;

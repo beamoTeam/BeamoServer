@@ -60,8 +60,9 @@ public class ChatRoomController {
             Restaurant restaurant = restaurantRepository.findBySeq(chatInfoDto.getRestaurant_seq());
             ChatInfo chatInfo = ChatInfo.builder()
                     .address(chatInfoDto.getAddress())
+                    .detail_address(chatInfoDto.getDetail_address())
                     .maxPersonnel(chatInfoDto.getMaxPersonnel())
-                    .name(chatInfoDto.getName())
+                    .name(chatInfoDto.getDetail_address()+" - "+chatInfoDto.getRestaurant_seq())
                     .orderTime(chatInfoDto.getOrderTime())
                     .restaurant(restaurant)
                     .build();
