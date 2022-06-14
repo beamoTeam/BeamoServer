@@ -12,7 +12,10 @@ import com.example.beamo.repository.orders.Order;
 import com.example.beamo.repository.orders.OrderRepository;
 import com.example.beamo.repository.restaurants.Restaurant;
 import com.example.beamo.repository.restaurants.RestaurantRepository;
+import com.example.beamo.repository.users.Users;
+import com.example.beamo.repository.users.UsersRepository;
 import io.swagger.annotations.ApiOperation;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -40,6 +43,9 @@ public class OrderController {
 
     @Autowired
     ChatRoomRepository chatRoomRepository;
+
+    @Autowired
+    UsersRepository usersRepository;
 
     @Autowired
     BasketMenuRepository basketMenuRepository;
@@ -75,6 +81,15 @@ public class OrderController {
                         .build();
 
                 orderRepository.save(order);
+
+                Users u = usersRepository.findBuU_seq(u_seq);
+                if (u.getPoint()-basket.getTotal_amount() < 0 ) {
+                    return ResponseEntity.badRequest().body("잔액이 부족합니다. 잔액을 확인해주세요");
+                }
+                else {
+                    u.setPoint(u.getPoint()-basket.getTotal_amount());
+                    usersRepository.save(u);
+                }
 
                 return ResponseEntity.ok(order);
             }
