@@ -244,19 +244,10 @@ public class OrderController {
     @GetMapping("/accepted/{c_seq}")
     public ResponseEntity getAcceptedByC_seq(@PathVariable("c_seq") Long seq) {
         List<Order> ls = orderRepository.findListByC_seq(seq);
-        boolean pass = false;
         for( Order tmp : ls) {
-            if(tmp.getPayMethod() == "접수 대기") {
-                tmp.setPayMethod("접수 완료");
-                pass = true;
-            }
+            tmp.setPayMethod("접수 완료");
         }
-        if (pass == true){
-            orderRepository.saveAll(ls);
-            return ResponseEntity.ok().build();
-        }
-        else {
-            return ResponseEntity.badRequest().body("이미 접수 완료 된 상태 입니다. 다시 확인해주세요.");
-        }
+        orderRepository.saveAll(ls);
+        return ResponseEntity.ok().build();
     }
 }
