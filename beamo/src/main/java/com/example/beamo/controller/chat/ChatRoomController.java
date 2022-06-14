@@ -1,5 +1,6 @@
 package com.example.beamo.controller.chat;
 
+import com.example.beamo.dto.chat.ChatInfoAddressDto;
 import com.example.beamo.dto.chat.ChatInfoDto;
 import com.example.beamo.repository.baskets.Basket;
 import com.example.beamo.repository.baskets.BasketRepository;
@@ -48,6 +49,13 @@ public class ChatRoomController {
     @GetMapping
     public ResponseEntity getAllRoom() {
         return ResponseEntity.ok(chatInfoRepository.findAll(Sort.by(Sort.Direction.DESC, "seq")));
+    }
+
+    @ApiOperation(value = "주소로 방 조회")
+    @PostMapping
+    public ResponseEntity getRoomByAddress(@RequestBody @NotNull ChatInfoAddressDto chatInfoAddressDto) {
+        String address = chatInfoAddressDto.getAddress();
+        return ResponseEntity.ok(chatInfoRepository.findByAddress(address, Sort.by(Sort.Direction.DESC, "seq")));
     }
 
     @ApiOperation(value = "유저번호로 방 만들기")
