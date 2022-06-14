@@ -15,7 +15,6 @@ import com.example.beamo.repository.restaurants.RestaurantRepository;
 import com.example.beamo.repository.users.Users;
 import com.example.beamo.repository.users.UsersRepository;
 import io.swagger.annotations.ApiOperation;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -26,7 +25,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping(value = "/api/order" , produces = "application/json")
@@ -150,6 +151,7 @@ public class OrderController {
                 bml = basketMenuRepository.findMLUC(list.get((int) i),seq);
                 oil.add( orderInfoDto.addInfo( nameList.get((int) i), bml, true) );
             }
+
             OrderMenuListDto oml = OrderMenuListDto.builder()
                     .restaurantName(restaurant.getName())
                     .totalAmount(totalPrice)
@@ -173,56 +175,44 @@ public class OrderController {
 
         List<OrderMenuListDto> omlList = new ArrayList<>();
 
-        Restaurant restaurant = Restaurant.builder().build();
-        LocalDateTime payDatetime = null;
-        String address = "";
+
+        Set set = new HashSet();
+
 
         OrderInfoDto orderInfoDto = new OrderInfoDto();
-        List<OrderInfoDto> oil = new ArrayList<>();
         List<BasketMenu> bml = new ArrayList<>();
+        List<Order> orderList = orderRepository.findListByR_seq(seq);
 
-        List<Long> list = new ArrayList<>();
-        List<String> nameList = new ArrayList<>();
 
-        int count = 0;
-        int totalPrice = 0;
+        for(Order tmp : orderList) {
+            set.add(tmp.getChatRoom().getSeq());
+        }
 
-        List<ChatRoom> cls = orderRepository.findChatRoomByR_seq(seq);
-
-        for(ChatRoom crtmp : cls) {
-
-            List<Order> ls = orderRepository.findListByC_seq(crtmp.getSeq());
+        for(Object chatNum : set) {
+            List<OrderInfoDto> oil = new ArrayList<>();
+            int totalPrice = 0;
+            LocalDateTime payDatetime = null;
+            String address = "";
+            List<Order> ls = orderRepository.findListByC_seq((Long) chatNum);
 
             for( Order tmp : ls) {
-                totalPrice += tmp.getPayAmount();
-            }
-            for( Order tmp : ls) {
-                tmp.setTotalStatus((short) 1);
-                tmp.setTotalAmount(totalPrice);
-                restaurant = tmp.getRestaurant();
+                totalPrice = tmp.getTotalAmount();
                 payDatetime = tmp.getUpdatedDateTime();
                 address = tmp.getChatRoom().getChatInfo().getAddress();
-            }
-            List<Order> savedOrders = orderRepository.saveAll(ls);
-
-            for( Order tmp : ls) {
-                nameList.add(tmp.getChatRoom().getUsers().getName());
-                list.add(tmp.getChatRoom().getUsers().getSeq());
-            }
-
-            for( long i = 0 ; i<list.size() ; i++) {
-                bml = basketMenuRepository.findMLUC(list.get((int) i),seq);
-                oil.add( orderInfoDto.addInfo( nameList.get((int) i), bml, true) );
+                bml = basketMenuRepository.findMLUC(tmp.getChatRoom().getUsers().getSeq(), (Long) chatNum);
+                oil.add( orderInfoDto.addInfo( tmp.getChatRoom().getUsers().getName(), bml, true) );
             }
             OrderMenuListDto oml = OrderMenuListDto.builder()
-                    .restaurantName(restaurant.getName())
+                    .restaurantName(restaurantRepository.findBySeq(seq).getName())
                     .totalAmount(totalPrice)
                     .payDatetime(payDatetime)
                     .UserOrderList(oil)
                     .address(address)
                     .build();
+
             omlList.add(oml);
         }
+
         return ResponseEntity.ok(omlList);
     }
 }

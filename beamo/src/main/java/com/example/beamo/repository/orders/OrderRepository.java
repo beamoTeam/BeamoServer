@@ -34,4 +34,6 @@ public interface OrderRepository extends JpaRepository <Order, Long> {
     Order findByChatRoom(ChatRoom chatRoom);
 
 
+    @Query(value = "select order.chatRoom.seq from Order as order where order.restaurant.seq=?1")
+    List<Long> findC_seqListByR_seq(Long seq);
 }
