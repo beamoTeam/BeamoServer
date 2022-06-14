@@ -195,6 +195,7 @@ public class OrderController {
             String address = "";
             List<Order> ls = orderRepository.findListByC_seq((Long) chatNum);
 
+            boolean pass = false;
             for( Order tmp : ls) {
                 if(tmp.getTotalStatus()==1){
                     totalPrice = tmp.getTotalAmount();
@@ -202,17 +203,21 @@ public class OrderController {
                     address = tmp.getChatRoom().getChatInfo().getAddress();
                     bml = basketMenuRepository.findMLUC(tmp.getChatRoom().getUsers().getSeq(), (Long) chatNum);
                     oil.add( orderInfoDto.addInfo( tmp.getChatRoom().getUsers().getName(), bml, true) );
+                }else {
+                    pass = true;
                 }
             }
-            OrderMenuListDto oml = OrderMenuListDto.builder()
-                    .restaurantName(restaurantRepository.findBySeq(seq).getName())
-                    .totalAmount(totalPrice)
-                    .payDatetime(payDatetime)
-                    .UserOrderList(oil)
-                    .address(address)
-                    .build();
+            if (pass == false) {
+                OrderMenuListDto oml = OrderMenuListDto.builder()
+                        .restaurantName(restaurantRepository.findBySeq(seq).getName())
+                        .totalAmount(totalPrice)
+                        .payDatetime(payDatetime)
+                        .UserOrderList(oil)
+                        .address(address)
+                        .build();
 
-            omlList.add(oml);
+                omlList.add(oml);
+            }
         }
 
         return ResponseEntity.ok(omlList);
