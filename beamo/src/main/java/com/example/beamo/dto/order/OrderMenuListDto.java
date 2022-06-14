@@ -22,5 +22,7 @@ public class OrderMenuListDto {
 
     private LocalDateTime payDatetime;
 
+    private long c_seq;
+    private String accepted;
     private int totalAmount;
 }

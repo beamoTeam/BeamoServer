@@ -80,7 +80,6 @@ public class OrderController {
                         .totalStatus((short) 0)
                         .restaurant(restaurant)
                         .build();
-
                 orderRepository.save(order);
 
                 Users u = usersRepository.findBuU_seq(u_seq);
@@ -90,6 +89,19 @@ public class OrderController {
                 else {
                     u.setPoint(u.getPoint()-basket.getTotal_amount());
                     usersRepository.save(u);
+                }
+                List<Order> ls = orderRepository.findListByC_seq(chatRoom.getSeq());
+                if(chatRoom.getChatInfo().getMaxPersonnel() == ls.size()) {
+                    int totalPrice = 0;
+                    for( Order tmp : ls) {
+                        totalPrice += tmp.getPayAmount();
+                    }
+                    for( Order tmp : ls) {
+                        tmp.setTotalStatus((short) 1);
+                        tmp.setPayMethod("접수 대기");
+                        tmp.setTotalAmount(totalPrice);
+                    }
+                    orderRepository.saveAll(ls);
                 }
 
                 return ResponseEntity.ok(order);
@@ -193,6 +205,8 @@ public class OrderController {
             int totalPrice = 0;
             LocalDateTime payDatetime = null;
             String address = "";
+            String accepted = "";
+            long c_seq = 0;
             List<Order> ls = orderRepository.findListByC_seq((Long) chatNum);
 
             boolean pass = false;
@@ -201,6 +215,8 @@ public class OrderController {
                     totalPrice = tmp.getTotalAmount();
                     payDatetime = tmp.getUpdatedDateTime();
                     address = tmp.getChatRoom().getChatInfo().getAddress();
+                    accepted = tmp.getPayMethod();
+                    c_seq = (long) chatNum;
                     bml = basketMenuRepository.findMLUC(tmp.getChatRoom().getUsers().getSeq(), (Long) chatNum);
                     oil.add( orderInfoDto.addInfo( tmp.getChatRoom().getUsers().getName(), bml, true) );
                 }else {
@@ -209,17 +225,38 @@ public class OrderController {
             }
             if (pass == false) {
                 OrderMenuListDto oml = OrderMenuListDto.builder()
+                        .c_seq(c_seq)
                         .restaurantName(restaurantRepository.findBySeq(seq).getName())
                         .totalAmount(totalPrice)
                         .payDatetime(payDatetime)
                         .UserOrderList(oil)
                         .address(address)
+                        .accepted(accepted)
                         .build();
-
                 omlList.add(oml);
             }
         }
 
         return ResponseEntity.ok(omlList);
+    }
+
+    @ApiOperation(value = "주문 접수 상태 변경")
+    @GetMapping("/accepted/{c_seq}")
+    public ResponseEntity getAcceptedByC_seq(@PathVariable("c_seq") Long seq) {
+        List<Order> ls = orderRepository.findListByC_seq(seq);
+        boolean pass = false;
+        for( Order tmp : ls) {
+            if(tmp.getPayMethod() == "접수 대기") {
+                tmp.setPayMethod("접수 완료");
+                pass = true;
+            }
+        }
+        if (pass == true){
+            orderRepository.saveAll(ls);
+            return ResponseEntity.ok().build();
+        }
+        else {
+            return ResponseEntity.badRequest().body("이미 접수 완료 된 상태 입니다. 다시 확인해주세요.");
+        }
     }
 }
