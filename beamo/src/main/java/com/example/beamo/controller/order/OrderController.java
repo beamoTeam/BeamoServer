@@ -24,10 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Controller
 @RequestMapping(value = "/api/order" , produces = "application/json")
@@ -237,6 +234,7 @@ public class OrderController {
             }
         }
 
+        Collections.reverse(omlList);
         return ResponseEntity.ok(omlList);
     }
 
