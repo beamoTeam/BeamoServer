@@ -196,11 +196,13 @@ public class OrderController {
             List<Order> ls = orderRepository.findListByC_seq((Long) chatNum);
 
             for( Order tmp : ls) {
-                totalPrice = tmp.getTotalAmount();
-                payDatetime = tmp.getUpdatedDateTime();
-                address = tmp.getChatRoom().getChatInfo().getAddress();
-                bml = basketMenuRepository.findMLUC(tmp.getChatRoom().getUsers().getSeq(), (Long) chatNum);
-                oil.add( orderInfoDto.addInfo( tmp.getChatRoom().getUsers().getName(), bml, true) );
+                if(tmp.getTotalStatus()==1){
+                    totalPrice = tmp.getTotalAmount();
+                    payDatetime = tmp.getUpdatedDateTime();
+                    address = tmp.getChatRoom().getChatInfo().getAddress();
+                    bml = basketMenuRepository.findMLUC(tmp.getChatRoom().getUsers().getSeq(), (Long) chatNum);
+                    oil.add( orderInfoDto.addInfo( tmp.getChatRoom().getUsers().getName(), bml, true) );
+                }
             }
             OrderMenuListDto oml = OrderMenuListDto.builder()
                     .restaurantName(restaurantRepository.findBySeq(seq).getName())
