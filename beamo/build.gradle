@@ -25,6 +25,20 @@ dependencies {
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
+	//kakao
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+//	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+	//jwt
+	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.4'
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.4'
+	implementation 'com.auth0:java-jwt:4.0.0'
+
+
+
+	implementation 'com.google.code.gson:gson:2.8.7'
 	implementation group: 'org.mapstruct', name: 'mapstruct', version: '1.4.2.Final'
 	implementation 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
 	implementation 'org.jetbrains:annotations:20.1.0'

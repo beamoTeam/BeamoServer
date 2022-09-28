@@ -20,6 +20,8 @@ public class Users{
 
     private String name;
 
+    private String email;
+
     @Column(length = 300)
     private String profile;
 
@@ -30,6 +32,9 @@ public class Users{
 
     @Column(name = "acount_num")
     private Integer acountNum;
+
+    @Column(name = "user_role")
+    private String userRole;
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @Column(name = "created_dt",updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")

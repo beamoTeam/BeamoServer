@@ -1,5 +1,7 @@
 package com.example.beamo.config;
 
+//import com.example.beamo.jwt.CustomAuthenticationEntryPoint;
+import com.example.beamo.jwt.JwtRequestFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -22,6 +25,8 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import javax.servlet.Filter;
+
 
 @Configuration
 @EnableWebSecurity
@@ -29,18 +34,42 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
+    @Autowired
+    CorsFilter corsFilter;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.headers().frameOptions().disable();
-        http
-                .cors()
+        http.cors()
                 .and()
                 .csrf().disable().authorizeRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers("/**").permitAll()
                 .antMatchers("/api/**").permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
+//                .authenticated()
         ;
+//        http.csrf().disable()
+//                .sessionManagement()
+//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//
+//                .and()
+//                .httpBasic().disable()
+//                .formLogin().disable()
+//                .addFilter(corsFilter);
+//
+//        http.authorizeRequests()
+//                .antMatchers("/oauth/**")
+//                .authenticated()
+//                .anyRequest().permitAll()
+
+//                .and()
+//                //(1)
+//                .exceptionHandling()
+//                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+        ;
+
+//        http.addFilterBefore(new JwtRequestFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
         @Bean
@@ -56,6 +85,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             source.registerCorsConfiguration("/**", configuration);
             return source;
         }
+
 //    @Bean
 //    public WebMvcConfigurer corsConfigurer() {
 //        return new WebMvcConfigurerAdapter() {

@@ -8,4 +8,7 @@ import org.springframework.stereotype.Repository;
 public interface UsersRepository extends JpaRepository<Users, Long> {
     @Query(value = "select u from Users as u where u.seq=?1")
     Users findBuU_seq(Long seq);
+
+    public Users findByEmail(String email);
+
 }
