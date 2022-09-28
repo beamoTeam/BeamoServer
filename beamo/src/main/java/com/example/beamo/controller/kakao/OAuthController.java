@@ -59,6 +59,8 @@ public class OAuthController {
     public ResponseEntity<Object> getCurrentUser(HttpServletRequest request) { //(1)
 
         //(2)
+        System.out.println("get me request : "+request);
+        System.out.println("get me request.authorization : "+request.getHeader("authorization"));
         Users user = userService.getUser(request);
         Long userCode = (Long) request.getAttribute("userCode");
         System.out.println(userCode);
