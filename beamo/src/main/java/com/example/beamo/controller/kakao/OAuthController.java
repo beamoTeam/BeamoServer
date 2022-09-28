@@ -4,6 +4,7 @@ import com.example.beamo.jwt.JwtProperties;
 import com.example.beamo.model.OauthToken;
 import com.example.beamo.repository.users.Users;
 import com.example.beamo.service.users.UserService;
+import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -20,7 +21,7 @@ import java.util.Map;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/oauth")
+@RequestMapping(value = "/oauth", produces = "application/json")
 public class OAuthController {
 
     @Autowired
@@ -28,7 +29,9 @@ public class OAuthController {
 
     @Autowired
     UserService userService;
-    @RequestMapping(value="/kakao")
+
+    @ApiOperation(value = "로그인 및 JWT 토큰 요청")
+    @GetMapping(value="/kakao")
     public ResponseEntity login(@RequestParam("code") String code) {
         System.out.println(code);
         String access_Token = oAuthService.getKakaoAccesToken(code);
@@ -50,6 +53,8 @@ public class OAuthController {
             return new ResponseEntity<>("login fail", HttpStatus.NOT_FOUND);
         }
     }
+
+//    @ApiOperation(value = "JWT 로 회원 정보 조회")
     @GetMapping("/me")
     public ResponseEntity<Object> getCurrentUser(HttpServletRequest request) { //(1)
 
@@ -65,7 +70,7 @@ public class OAuthController {
         return ResponseEntity.ok().body(user);
     }
 
-    @RequestMapping(value="/logout")
+    @GetMapping(value="/logout")
     public Map<String, Object> logout(@RequestHeader Map<String, Object> requestHeader){
         System.out.println(requestHeader);
         System.out.println(requestHeader.get("authorization"));
