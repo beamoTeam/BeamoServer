@@ -75,10 +75,12 @@ public class ChatRoomController {
             return ResponseEntity.badRequest().body("유저 정보가 없습니다. 확인해주세요.");
         } else {
             Restaurant restaurant = restaurantRepository.findBySeq(chatInfoDto.getRestaurant_seq());
+
             ChatInfo chatInfo = ChatInfo.builder()
                     .address(chatInfoDto.getAddress())
                     .detail_address(chatInfoDto.getDetail_address())
                     .maxPersonnel(chatInfoDto.getMaxPersonnel())
+                    .currentMembers((short) 1)
                     .name(restaurant.getName() +" - "+chatInfoDto.getDetail_address())
                     .orderTime(chatInfoDto.getOrderTime())
                     .restaurant(restaurant)
