@@ -58,8 +58,8 @@ public class BasketController {
 //    }
 
     @ApiOperation(value = "유저번호로 바스켓에 메뉴 넣기")
-    @PostMapping("/{c_seq}")
-    public ResponseEntity putMenuToBasket(HttpServletRequest request, @PathVariable("c_seq") Long c_seq,
+    @PostMapping("/{room_seq}")
+    public ResponseEntity putMenuToBasket(HttpServletRequest request, @PathVariable("room_seq") Long c_seq,
                                           @RequestBody @NotNull MenuDto menuDto) {
 
         long u_seq = userService.getUser(request).getSeq();
@@ -95,8 +95,8 @@ public class BasketController {
     }
 
     @ApiOperation(value = "유저번호로 바스켓 조회")
-    @GetMapping("/{c_seq}")
-    public ResponseEntity getBasketByU_seq(HttpServletRequest request, @PathVariable("c_seq") Long c_seq) {
+    @GetMapping("/{room_seq}")
+    public ResponseEntity getBasketByU_seq(HttpServletRequest request, @PathVariable("room_seq") Long c_seq) {
         long u_seq = userService.getUser(request).getSeq();
         ChatRoom chatRoom = chatRoomRepository.findByU_seqAndC_I_Seq(u_seq, c_seq);
         Basket lb = basketRepository.findByChatRoom(chatRoom);

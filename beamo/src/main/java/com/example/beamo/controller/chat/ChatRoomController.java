@@ -14,6 +14,7 @@ import com.example.beamo.repository.restaurants.menu.MenuRepository;
 import com.example.beamo.repository.users.Users;
 import com.example.beamo.repository.users.UsersRepository;
 import com.example.beamo.service.users.UserService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/chatroom", produces = "application/json")
+@Api(tags = {"room-controller"})
+@RequestMapping(value = "/api/room", produces = "application/json")
 public class ChatRoomController {
 
     @Autowired
@@ -101,8 +103,8 @@ public class ChatRoomController {
     }
 
     @ApiOperation(value = "유저번호로 방 들어가기")
-    @PostMapping("/{c_seq}")
-    public ResponseEntity JoinChat(HttpServletRequest request, @PathVariable("c_seq") Long c_seq) {
+    @PostMapping("/{room_seq}")
+    public ResponseEntity JoinChat(HttpServletRequest request, @PathVariable("room_seq") Long c_seq) {
         long u_seq = userService.getUser(request).getSeq();
 
         ChatRoom chatRoom = chatRoomRepository.findByU_seqAndC_I_Seq(u_seq, c_seq);

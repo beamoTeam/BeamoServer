@@ -61,8 +61,8 @@ public class OrderController {
     }
 
     @ApiOperation(value = "유저번호로 바스켓 내용 그대로 주문 넣기")
-    @PostMapping("/{c_seq}")
-    public ResponseEntity orderByU_seq(HttpServletRequest request, @PathVariable("c_seq") Long c_seq) {
+    @PostMapping("/{room_seq}")
+    public ResponseEntity orderByU_seq(HttpServletRequest request, @PathVariable("room_seq") Long c_seq) {
         long u_seq  = userService.getUser(request).getSeq();
 
         ChatRoom chatRoom = chatRoomRepository.findByU_seqAndC_I_Seq(u_seq, c_seq);
@@ -117,8 +117,8 @@ public class OrderController {
     }
 
     @ApiOperation(value = "시간 되면 자동 주문 현재는 버튼식")
-    @GetMapping("total/{c_seq}")
-    public ResponseEntity timetoOrder(@PathVariable("c_seq") Long seq) {
+    @GetMapping("total/{room_seq}")
+    public ResponseEntity timetoOrder(@PathVariable("room_seq") Long seq) {
 
         List<Order> ls = orderRepository.findListByC_seq(seq);
 
@@ -246,8 +246,8 @@ public class OrderController {
     }
 
     @ApiOperation(value = "주문 접수 상태 변경")
-    @GetMapping("/accepted/{c_seq}")
-    public ResponseEntity getAcceptedByC_seq(@PathVariable("c_seq") Long seq) {
+    @GetMapping("/accepted/{room_seq}")
+    public ResponseEntity getAcceptedByC_seq(@PathVariable("room_seq") Long seq) {
         List<Order> ls = orderRepository.findListByC_seq(seq);
         for( Order tmp : ls) {
             tmp.setPayMethod("접수 완료");
