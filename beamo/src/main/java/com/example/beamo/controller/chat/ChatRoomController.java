@@ -19,6 +19,7 @@ import io.swagger.annotations.ApiOperation;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -65,9 +66,12 @@ public class ChatRoomController {
         return ResponseEntity.ok(chatInfoRepository.findByAddress(address, Sort.by(Sort.Direction.DESC, "seq")));
     }
 
-    @ApiOperation(value = "유저번호로 방 만들기")
+    @ApiOperation(value = "JWT 유저번호로 방 만들기")
     @PostMapping
     public ResponseEntity makeChatRoomWhitU_seq(HttpServletRequest request, @RequestBody @NotNull ChatInfoDto chatInfoDto) {
+        if (userService.getUser(request) == null) {
+            return new ResponseEntity<>("로그인이 필요합니다.", HttpStatus.UNAUTHORIZED);
+        }
         long seq = userService.getUser(request).getSeq();
         Users user = usersRepository.findBuU_seq(seq);
 
@@ -102,9 +106,12 @@ public class ChatRoomController {
         }
     }
 
-    @ApiOperation(value = "유저번호로 방 들어가기")
+    @ApiOperation(value = "JWT 유저번호로 방 들어가기")
     @PostMapping("/{room_seq}")
     public ResponseEntity JoinChat(HttpServletRequest request, @PathVariable("room_seq") Long c_seq) {
+        if (userService.getUser(request) == null) {
+            return new ResponseEntity<>("로그인이 필요합니다.", HttpStatus.UNAUTHORIZED);
+        }
         long u_seq = userService.getUser(request).getSeq();
 
         ChatRoom chatRoom = chatRoomRepository.findByU_seqAndC_I_Seq(u_seq, c_seq);

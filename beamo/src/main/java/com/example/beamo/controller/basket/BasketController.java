@@ -19,6 +19,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -62,13 +63,16 @@ public class BasketController {
 //        return ResponseEntity.ok(anser);
 //    }
 
-    @ApiOperation(value = "유저번호로 바스켓에 메뉴 넣기")
+    @ApiOperation(value = "JWT 유저번호로 바스켓에 메뉴 넣기")
     @PostMapping("/{room_seq}")
     public ResponseEntity putMenuToBasket(HttpServletRequest request, @PathVariable("room_seq") Long c_seq,
                                           @RequestBody @NotNull MenuDto menuDto) {
 
-        long u_seq = userService.getUser(request).getSeq();
+        if (userService.getUser(request) == null) {
+            return new ResponseEntity<>("로그인이 필요합니다.", HttpStatus.UNAUTHORIZED);
+        }
 
+        long u_seq = userService.getUser(request).getSeq();
 
         ChatRoom chatRoom = chatRoomRepository.findByU_seqAndC_I_Seq(u_seq, c_seq);
         Long basket_seq = 0L;
@@ -111,9 +115,12 @@ public class BasketController {
         return ResponseEntity.ok(resultDto);
     }
 
-    @ApiOperation(value = "유저번호로 바스켓 조회")
+    @ApiOperation(value = "JWT 유저번호로 바스켓 조회")
     @GetMapping("/{room_seq}")
     public ResponseEntity getBasketByU_seq(HttpServletRequest request, @PathVariable("room_seq") Long c_seq) {
+        if (userService.getUser(request) == null) {
+            return new ResponseEntity<>("로그인이 필요합니다.", HttpStatus.UNAUTHORIZED);
+        }
         long u_seq = userService.getUser(request).getSeq();
         ChatRoom chatRoom = chatRoomRepository.findByU_seqAndC_I_Seq(u_seq, c_seq);
         if(chatRoom == null) {

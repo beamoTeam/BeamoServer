@@ -17,6 +17,7 @@ import com.example.beamo.repository.users.UsersRepository;
 import com.example.beamo.service.users.UserService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,16 +54,22 @@ public class OrderController {
     @Autowired
     UserService userService;
 
-    @ApiOperation(value = "유저번호로 주문 조회")
+    @ApiOperation(value = "JWT 유저번호로 주문 조회")
     @GetMapping
     public ResponseEntity getOrderByU_seq(HttpServletRequest request) {
+        if (userService.getUser(request) == null) {
+            return new ResponseEntity<>("로그인이 필요합니다.", HttpStatus.UNAUTHORIZED);
+        }
         long seq = userService.getUser(request).getSeq();
         return ResponseEntity.ok(orderRepository.findListByU_seq(seq));
     }
 
-    @ApiOperation(value = "유저번호로 바스켓 내용 그대로 주문 넣기")
+    @ApiOperation(value = "JWT 유저번호로 바스켓 내용 그대로 주문 넣기")
     @PostMapping("/{room_seq}")
     public ResponseEntity orderByU_seq(HttpServletRequest request, @PathVariable("room_seq") Long c_seq) {
+        if (userService.getUser(request) == null) {
+            return new ResponseEntity<>("로그인이 필요합니다.", HttpStatus.UNAUTHORIZED);
+        }
         long u_seq  = userService.getUser(request).getSeq();
 
         ChatRoom chatRoom = chatRoomRepository.findByU_seqAndC_I_Seq(u_seq, c_seq);
@@ -254,12 +261,5 @@ public class OrderController {
         }
         orderRepository.saveAll(ls);
         return ResponseEntity.ok().build();
-    }
-
-    @ApiOperation(value = "주문 test")
-    @GetMapping("/test/{room_seq}")
-    public ResponseEntity order_btn(@PathVariable("room_seq") Long seq) {
-        List<Order> ls = orderRepository.findListByC_seq(seq);
-        return ResponseEntity.ok().body(ls);
     }
 }

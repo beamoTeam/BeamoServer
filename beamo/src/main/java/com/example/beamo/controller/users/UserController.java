@@ -7,6 +7,7 @@ import com.example.beamo.service.users.UserService;
 import com.sun.istack.NotNull;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,10 +35,12 @@ public class UserController {
         return ResponseEntity.ok(usersList);
     }
 
-    @ApiOperation(value = "사용자 상세정보 출력")
+    @ApiOperation(value = "JWT 사용자 상세정보 출력")
     @GetMapping("/info")
     ResponseEntity getUsersBySeq(HttpServletRequest request) {
-
+        if (userService.getUser(request) == null) {
+            return new ResponseEntity<>("로그인이 필요합니다.", HttpStatus.UNAUTHORIZED);
+        }
         Users users = usersRepository.findBuU_seq(userService.getUser(request).getSeq());
         return ResponseEntity.ok(users);
     }
