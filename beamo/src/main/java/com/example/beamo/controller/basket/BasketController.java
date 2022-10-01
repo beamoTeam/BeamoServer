@@ -12,6 +12,7 @@ import com.example.beamo.repository.chats.ChatRoom;
 import com.example.beamo.repository.chats.ChatRoomRepository;
 import com.example.beamo.repository.restaurants.RestaurantRepository;
 import com.example.beamo.repository.restaurants.menu.MenuRepository;
+import com.example.beamo.service.users.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -20,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +45,9 @@ public class BasketController {
     @Autowired
     ChatRoomRepository chatRoomRepository;
 
+    @Autowired
+    UserService userService;
+
     MapperForBeamo mapperForBeamo;
 
 //    @ApiOperation(value = "유저번호로 바스켓 내에 있는 메뉴 조회")
@@ -53,9 +58,12 @@ public class BasketController {
 //    }
 
     @ApiOperation(value = "유저번호로 바스켓에 메뉴 넣기")
-    @PostMapping("/{u_seq}/{c_seq}")
-    public ResponseEntity putMenuToBasket(@PathVariable("u_seq") Long u_seq, @PathVariable("c_seq") Long c_seq,
+    @PostMapping("/{c_seq}")
+    public ResponseEntity putMenuToBasket(HttpServletRequest request, @PathVariable("c_seq") Long c_seq,
                                           @RequestBody @NotNull MenuDto menuDto) {
+
+        long u_seq = userService.getUser(request).getSeq();
+        System.out.println(u_seq);
 
         ChatRoom chatRoom = chatRoomRepository.findByU_seqAndC_I_Seq(u_seq, c_seq);
         Basket lb = basketRepository.findByChatRoom(chatRoom);
@@ -87,8 +95,9 @@ public class BasketController {
     }
 
     @ApiOperation(value = "유저번호로 바스켓 조회")
-    @GetMapping("/{u_seq}/{c_seq}")
-    public ResponseEntity getBasketByU_seq(@PathVariable("u_seq") Long u_seq, @PathVariable("c_seq") Long c_seq) {
+    @GetMapping("/{c_seq}")
+    public ResponseEntity getBasketByU_seq(HttpServletRequest request, @PathVariable("c_seq") Long c_seq) {
+        long u_seq = userService.getUser(request).getSeq();
         ChatRoom chatRoom = chatRoomRepository.findByU_seqAndC_I_Seq(u_seq, c_seq);
         Basket lb = basketRepository.findByChatRoom(chatRoom);
 

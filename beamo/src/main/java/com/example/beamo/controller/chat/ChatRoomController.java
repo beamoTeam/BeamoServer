@@ -13,6 +13,7 @@ import com.example.beamo.repository.restaurants.RestaurantRepository;
 import com.example.beamo.repository.restaurants.menu.MenuRepository;
 import com.example.beamo.repository.users.Users;
 import com.example.beamo.repository.users.UsersRepository;
+import com.example.beamo.service.users.UserService;
 import io.swagger.annotations.ApiOperation;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -44,6 +46,9 @@ public class ChatRoomController {
     @Autowired
     MenuRepository menuRepository;
 
+    @Autowired
+    UserService userService;
+
 
     @ApiOperation(value = "모든 방 조회")
     @GetMapping
@@ -52,15 +57,16 @@ public class ChatRoomController {
     }
 
     @ApiOperation(value = "주소로 방 조회")
-    @PostMapping
+    @PostMapping("/address")
     public ResponseEntity getRoomByAddress(@RequestBody @NotNull ChatInfoAddressDto chatInfoAddressDto) {
         String address = chatInfoAddressDto.getAddress();
         return ResponseEntity.ok(chatInfoRepository.findByAddress(address, Sort.by(Sort.Direction.DESC, "seq")));
     }
 
     @ApiOperation(value = "유저번호로 방 만들기")
-    @PostMapping("/{u_seq}")
-    public ResponseEntity makeChatRoomWhitU_seq(@PathVariable("u_seq") Long seq, @RequestBody @NotNull ChatInfoDto chatInfoDto) {
+    @PostMapping
+    public ResponseEntity makeChatRoomWhitU_seq(HttpServletRequest request, @RequestBody @NotNull ChatInfoDto chatInfoDto) {
+        long seq = userService.getUser(request).getSeq();
         Users user = usersRepository.findBuU_seq(seq);
 
         if (user == null) {
@@ -95,8 +101,9 @@ public class ChatRoomController {
     }
 
     @ApiOperation(value = "유저번호로 방 들어가기")
-    @PostMapping("/{u_seq}/{c_seq}")
-    public ResponseEntity JoinChat(@PathVariable("u_seq") Long u_seq, @PathVariable("c_seq") Long c_seq) {
+    @PostMapping("/{c_seq}")
+    public ResponseEntity JoinChat(HttpServletRequest request, @PathVariable("c_seq") Long c_seq) {
+        long u_seq = userService.getUser(request).getSeq();
 
         ChatRoom chatRoom = chatRoomRepository.findByU_seqAndC_I_Seq(u_seq, c_seq);
         if (chatRoom == null) {

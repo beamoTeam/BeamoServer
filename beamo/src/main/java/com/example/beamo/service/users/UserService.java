@@ -111,6 +111,7 @@ public class UserService {
     public Users getUser(HttpServletRequest request) { //(1)
         //(2)
         Long userCode = (Long) request.getAttribute("userCode");
+        System.out.println("userCode : " + userCode);
 
         //(3)
         Users user = userRepository.findBuU_seq(userCode);

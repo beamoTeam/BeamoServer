@@ -14,6 +14,7 @@ import com.example.beamo.repository.restaurants.Restaurant;
 import com.example.beamo.repository.restaurants.RestaurantRepository;
 import com.example.beamo.repository.users.Users;
 import com.example.beamo.repository.users.UsersRepository;
+import com.example.beamo.service.users.UserService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -48,15 +50,20 @@ public class OrderController {
     @Autowired
     BasketMenuRepository basketMenuRepository;
 
+    @Autowired
+    UserService userService;
+
     @ApiOperation(value = "유저번호로 주문 조회")
-    @GetMapping("{u_seq}")
-    public ResponseEntity getOrderByU_seq(@PathVariable("u_seq") Long seq) {
+    @GetMapping
+    public ResponseEntity getOrderByU_seq(HttpServletRequest request) {
+        long seq = userService.getUser(request).getSeq();
         return ResponseEntity.ok(orderRepository.findListByU_seq(seq));
     }
 
     @ApiOperation(value = "유저번호로 바스켓 내용 그대로 주문 넣기")
-    @PostMapping("/{u_seq}/{c_seq}")
-    public ResponseEntity orderByU_seq(@PathVariable("u_seq") Long u_seq, @PathVariable("c_seq") Long c_seq) {
+    @PostMapping("/{c_seq}")
+    public ResponseEntity orderByU_seq(HttpServletRequest request, @PathVariable("c_seq") Long c_seq) {
+        long u_seq  = userService.getUser(request).getSeq();
 
         ChatRoom chatRoom = chatRoomRepository.findByU_seqAndC_I_Seq(u_seq, c_seq);
         Basket basket = basketRepository.findByChatRoom(chatRoom);

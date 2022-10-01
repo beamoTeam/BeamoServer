@@ -3,6 +3,7 @@ package com.example.beamo.controller.users;
 import com.example.beamo.dto.users.UsersDto;
 import com.example.beamo.repository.users.Users;
 import com.example.beamo.repository.users.UsersRepository;
+import com.example.beamo.service.users.UserService;
 import com.sun.istack.NotNull;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
@@ -22,6 +24,9 @@ public class UserController {
     @Autowired
     UsersRepository usersRepository;
 
+    @Autowired
+    UserService userService;
+
     @ApiOperation(value = "사용자 전체 출력")
     @GetMapping
     ResponseEntity getUsers() {
@@ -30,9 +35,10 @@ public class UserController {
     }
 
     @ApiOperation(value = "사용자 상세정보 출력")
-    @PostMapping("/info")
-    ResponseEntity getUsersBySeq(@RequestBody @NotNull UsersDto usersDto) {
-        Users users = usersRepository.findBuU_seq(usersDto.getSeq());
+    @GetMapping("/info")
+    ResponseEntity getUsersBySeq(HttpServletRequest request) {
+
+        Users users = usersRepository.findBuU_seq(userService.getUser(request).getSeq());
         return ResponseEntity.ok(users);
     }
 }

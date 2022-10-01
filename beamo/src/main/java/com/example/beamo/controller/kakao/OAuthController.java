@@ -1,9 +1,11 @@
 package com.example.beamo.controller.kakao;
 
+import com.auth0.jwt.algorithms.Algorithm;
 import com.example.beamo.jwt.JwtProperties;
 import com.example.beamo.model.OauthToken;
 import com.example.beamo.repository.users.Users;
 import com.example.beamo.service.users.UserService;
+import io.jsonwebtoken.Jwts;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,8 +64,8 @@ public class OAuthController {
         System.out.println("get me request : "+request);
         System.out.println("get me request.authorization : "+request.getHeader("authorization"));
         Users user = userService.getUser(request);
-        Long userCode = (Long) request.getAttribute("userCode");
-        System.out.println(userCode);
+//        Long userCode = (Long) request.getAttribute("userCode");
+        System.out.println("user seq"+user.getSeq());
         if(user != null) {
             System.out.println(user.getName());
             System.out.println(user.getEmail());
