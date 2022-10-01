@@ -123,7 +123,7 @@ public class OrderController {
         }
     }
 
-    @ApiOperation(value = "시간 되면 자동 주문 현재는 버튼식")
+    @ApiOperation(value = "2명 이상인 주문 전체 주문 버튼")
     @GetMapping("total/{room_seq}")
     public ResponseEntity timetoOrder(@PathVariable("room_seq") Long seq) {
 
