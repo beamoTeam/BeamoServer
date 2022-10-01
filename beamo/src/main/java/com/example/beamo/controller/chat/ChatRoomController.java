@@ -116,9 +116,6 @@ public class ChatRoomController {
 
         ChatRoom chatRoom = chatRoomRepository.findByU_seqAndC_I_Seq(u_seq, c_seq);
         if (chatRoom == null) {
-            ChatInfo ci = chatInfoRepository.findBySeq(c_seq);
-            List<ChatRoom> roomList = chatRoomRepository.findByC_seq(c_seq);
-
             chatRoomRepository.saveComposite_Primary_Keys(u_seq, c_seq);
             ChatRoom cr = chatRoomRepository.findByU_seqAndC_I_Seq(u_seq, c_seq);
             Basket basket = Basket.builder()
@@ -126,9 +123,7 @@ public class ChatRoomController {
                     .build();
             basketRepository.save(basket);
 
-            return ResponseEntity.ok(chatInfoRepository.findBySeq(c_seq));
         }
-        else
-            return ResponseEntity.ok(chatInfoRepository.findBySeq(c_seq));
+        return ResponseEntity.ok(chatInfoRepository.findBySeq(c_seq));
     }
 }

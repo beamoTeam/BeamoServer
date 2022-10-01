@@ -75,23 +75,24 @@ public class BasketController {
         long u_seq = userService.getUser(request).getSeq();
 
         ChatRoom chatRoom = chatRoomRepository.findByU_seqAndC_I_Seq(u_seq, c_seq);
-        Long basket_seq = 0L;
-        if (chatRoom == null) {
-
-            ChatInfo ci = chatInfoRepository.findBySeq(c_seq);
-            List<ChatRoom> roomList = chatRoomRepository.findByC_seq(c_seq);
-
-            chatRoomRepository.saveComposite_Primary_Keys(u_seq, c_seq);
-
-            Basket basket = Basket.builder()
-                    .chatRoom(chatRoomRepository.findByU_seqAndC_I_Seq(u_seq, c_seq))
-                    .build();
-            basketRepository.save(basket);
-            basket_seq = basket.getSeq();
-        }
-        else {
-            basket_seq = basketRepository.findByChatRoom(chatRoom).getSeq();
-        }
+        Long basket_seq = basketRepository.findByChatRoom(chatRoom).getSeq();
+//        Long basket_seq = 0L;
+//        if (chatRoom == null) {
+//
+//            ChatInfo ci = chatInfoRepository.findBySeq(c_seq);
+//            List<ChatRoom> roomList = chatRoomRepository.findByC_seq(c_seq);
+//
+//            chatRoomRepository.saveComposite_Primary_Keys(u_seq, c_seq);
+//
+//            Basket basket = Basket.builder()
+//                    .chatRoom(chatRoomRepository.findByU_seqAndC_I_Seq(u_seq, c_seq))
+//                    .build();
+//            basketRepository.save(basket);
+//            basket_seq = basket.getSeq();
+//        }
+//        else {
+//            basket_seq = basketRepository.findByChatRoom(chatRoom).getSeq();
+//        }
 
         BasketMenuDto basketMenuDto = BasketMenuDto.builder()
                 .menu_seq(menuDto.getSeq())
