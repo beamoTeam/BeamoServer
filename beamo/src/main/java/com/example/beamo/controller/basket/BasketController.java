@@ -14,7 +14,6 @@ import com.example.beamo.repository.chats.ChatRoom;
 import com.example.beamo.repository.chats.ChatRoomRepository;
 import com.example.beamo.repository.restaurants.RestaurantRepository;
 import com.example.beamo.repository.restaurants.menu.MenuRepository;
-import com.example.beamo.service.chat.ChatInfoService;
 import com.example.beamo.service.users.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -54,8 +52,6 @@ public class BasketController {
     @Autowired
     UserService userService;
 
-    @Autowired
-    ChatInfoService chatInfoService;
 
     MapperForBeamo mapperForBeamo;
 
@@ -77,16 +73,11 @@ public class BasketController {
         ChatRoom chatRoom = chatRoomRepository.findByU_seqAndC_I_Seq(u_seq, c_seq);
         Long basket_seq = 0L;
         if (chatRoom == null) {
+
             ChatInfo ci = chatInfoRepository.findBySeq(c_seq);
             List<ChatRoom> roomList = chatRoomRepository.findByC_seq(c_seq);
-            if (ci.getMaxPersonnel() <= roomList.size()) {
-                return ResponseEntity.badRequest().body("인원 초과 입니다.");
-            }
+
             chatRoomRepository.saveComposite_Primary_Keys(u_seq, c_seq);
-
-            chatInfoService.plusCurrentMembers(ci);
-
-
 
             Basket basket = Basket.builder()
                     .chatRoom(chatRoomRepository.findByU_seqAndC_I_Seq(u_seq, c_seq))
@@ -160,20 +151,5 @@ public class BasketController {
         basketRepository.save(lb);
 
         return ResponseEntity.ok(basketDto);
-    }
-
-    @DeleteMapping("/{room_seq}")
-    public ResponseEntity exitRoom(HttpServletRequest request, @PathVariable("room_seq") Long c_seq) {
-        long u_seq = userService.getUser(request).getSeq();
-        ChatRoom chatRoom = chatRoomRepository.findByU_seqAndC_I_Seq(u_seq, c_seq);
-        if(chatRoom == null) {
-            return ResponseEntity.badRequest().body("room 이 없어 바구니가 존재하지 않았습니다. 다시 확인해주세요.");
-        }
-        else {
-            basketRepository.delete(basketRepository.findByChatRoom(chatRoom));
-            chatRoomRepository.deleteByU_seqAndC_I_Seq(u_seq,chatRoom.getChatInfo().getSeq());
-            chatInfoService.minusCurrentMembers(chatRoom.getChatInfo());
-            return ResponseEntity.noContent().build();
-        }
     }
 }

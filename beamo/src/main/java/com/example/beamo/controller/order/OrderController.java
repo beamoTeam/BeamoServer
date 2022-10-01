@@ -94,19 +94,19 @@ public class OrderController {
                     u.setPoint(u.getPoint()-basket.getTotal_amount());
                     usersRepository.save(u);
                 }
-                List<Order> ls = orderRepository.findListByC_seq(chatRoom.getSeq());
-                if(chatRoom.getChatInfo().getMaxPersonnel() == ls.size()) {
-                    int totalPrice = 0;
-                    for( Order tmp : ls) {
-                        totalPrice += tmp.getPayAmount();
-                    }
-                    for( Order tmp : ls) {
-                        tmp.setTotalStatus((short) 1);
-                        tmp.setPayMethod("접수 대기");
-                        tmp.setTotalAmount(totalPrice);
-                    }
-                    orderRepository.saveAll(ls);
-                }
+//                List<Order> ls = orderRepository.findListByC_seq(chatRoom.getSeq());
+//                if(chatRoom.getChatInfo().getMaxPersonnel() == ls.size()) {
+//                    int totalPrice = 0;
+//                    for( Order tmp : ls) {
+//                        totalPrice += tmp.getPayAmount();
+//                    }
+//                    for( Order tmp : ls) {
+//                        tmp.setTotalStatus((short) 1);
+//                        tmp.setPayMethod("접수 대기");
+//                        tmp.setTotalAmount(totalPrice);
+//                    }
+//                    orderRepository.saveAll(ls);
+//                }
 
                 return ResponseEntity.ok(order);
             }
@@ -254,5 +254,12 @@ public class OrderController {
         }
         orderRepository.saveAll(ls);
         return ResponseEntity.ok().build();
+    }
+
+    @ApiOperation(value = "주문 test")
+    @GetMapping("/test/{room_seq}")
+    public ResponseEntity order_btn(@PathVariable("room_seq") Long seq) {
+        List<Order> ls = orderRepository.findListByC_seq(seq);
+        return ResponseEntity.ok().body(ls);
     }
 }

@@ -19,8 +19,8 @@ public class ChatInfoDto {
     private String detail_address;
 //    private DecimalFormat latitude;
 //    private DecimalFormat longitude;
-    private short maxPersonnel;
-    private short currentMembers;
+//    private short maxPersonnel;
+//    private short currentMembers;
 
     @ApiModelProperty(example = "2022-06-04 20:00")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")

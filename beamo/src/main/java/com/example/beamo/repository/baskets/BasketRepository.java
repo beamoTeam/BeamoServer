@@ -13,8 +13,8 @@ public interface BasketRepository extends JpaRepository<Basket, Long> {
     @Query(value = "select b.basketMenuList FROM Basket as b WHERE b.chatRoom =?1")
     List<BasketMenu> findBasketMenuByU_seq(ChatRoom chatRoom);
 
-    @Query(value = "select b FROM Basket as b WHERE b.seq =?1")
-    Basket findListBasketByB_seq(long seq);
+    @Query(value = "select b FROM Basket as b WHERE b.chatRoom.users.seq =?1")
+    Basket findListBasketByU_seq(long seq);
 
     @Query(value = "select b.basketMenuList from Basket as b WHERE b.chatRoom.users.seq =?1 and b.chatRoom.chatInfo.seq=?2 ")
     List<BasketMenu> findMenuList_ByU_seqC_seq(Long u_seq, Long c_seq);

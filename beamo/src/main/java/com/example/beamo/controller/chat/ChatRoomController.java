@@ -79,8 +79,6 @@ public class ChatRoomController {
             ChatInfo chatInfo = ChatInfo.builder()
                     .address(chatInfoDto.getAddress())
                     .detail_address(chatInfoDto.getDetail_address())
-                    .maxPersonnel(chatInfoDto.getMaxPersonnel())
-                    .currentMembers((short) 1)
                     .name(restaurant.getName() +" - "+chatInfoDto.getDetail_address())
                     .orderTime(chatInfoDto.getOrderTime())
                     .restaurant(restaurant)
@@ -113,9 +111,6 @@ public class ChatRoomController {
         if (chatRoom == null) {
             ChatInfo ci = chatInfoRepository.findBySeq(c_seq);
             List<ChatRoom> roomList = chatRoomRepository.findByC_seq(c_seq);
-            if (ci.getMaxPersonnel() <= roomList.size()) {
-                return ResponseEntity.badRequest().body("인원 초과 입니다.");
-            }
 
             chatRoomRepository.saveComposite_Primary_Keys(u_seq, c_seq);
             ChatRoom cr = chatRoomRepository.findByU_seqAndC_I_Seq(u_seq, c_seq);

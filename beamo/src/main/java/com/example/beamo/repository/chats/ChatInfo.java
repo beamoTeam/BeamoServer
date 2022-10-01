@@ -31,8 +31,8 @@ public class ChatInfo {
 
     private DecimalFormat latitude;
     private DecimalFormat longitude;
-    private short maxPersonnel;
-    private short currentMembers;
+//    private short maxPersonnel;
+//    private short currentMembers;
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm")
     @Column(name = "order_time")
