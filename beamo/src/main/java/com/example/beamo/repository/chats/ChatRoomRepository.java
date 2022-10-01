@@ -31,4 +31,11 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, ChatRoomId> 
             "VALUES(?2, ?1, ?2)", nativeQuery = true)
     @Transactional
     int saveComposite_Primary_Keys(Long u, Long c);
+
+
+    @Modifying
+    @Query(value = "DELETE FROM ChatRoom as c WHERE c.users.seq=?1 and c.chatInfo.seq=?2")
+    @Transactional
+    int deleteByU_seqAndC_I_Seq(Long u, Long c_i);
+
 }

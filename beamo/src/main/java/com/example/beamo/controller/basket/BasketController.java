@@ -86,8 +86,10 @@ public class BasketController {
 
             chatInfoService.plusCurrentMembers(ci);
 
+
+
             Basket basket = Basket.builder()
-                    .chatRoom(chatRoom)
+                    .chatRoom(chatRoomRepository.findByU_seqAndC_I_Seq(u_seq, c_seq))
                     .build();
             basketRepository.save(basket);
             basket_seq = basket.getSeq();
@@ -168,6 +170,8 @@ public class BasketController {
             return ResponseEntity.badRequest().body("room 이 없어 바구니가 존재하지 않았습니다. 다시 확인해주세요.");
         }
         else {
+            basketRepository.delete(basketRepository.findByChatRoom(chatRoom));
+            chatRoomRepository.deleteByU_seqAndC_I_Seq(u_seq,chatRoom.getChatInfo().getSeq());
             chatInfoService.minusCurrentMembers(chatRoom.getChatInfo());
             return ResponseEntity.noContent().build();
         }
