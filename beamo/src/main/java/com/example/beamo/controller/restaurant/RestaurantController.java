@@ -6,6 +6,7 @@ import com.example.beamo.repository.restaurants.Restaurant;
 import com.example.beamo.repository.restaurants.RestaurantRepository;
 import com.example.beamo.repository.restaurants.menu.Menu;
 import com.example.beamo.repository.restaurants.menu.MenuRepository;
+import com.example.beamo.service.restaurant.RestaurantService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,9 @@ public class RestaurantController {
     @Autowired
     MenuRepository menuRepository;
 
+    @Autowired
+    RestaurantService restaurantService;
+
     @ApiOperation(value = "음식점 전체 조회")
     @GetMapping
     public ResponseEntity getList() {
@@ -34,8 +38,6 @@ public class RestaurantController {
     @ApiOperation(value = "음식점 전체 메뉴 출려 ")
     @GetMapping("/{r_seq}/menu")
     public ResponseEntity getMenu(@PathVariable("r_seq") Long seq) {
-        List<Menu> byR_Seq = menuRepository.findByRestaurant(seq);
-        List<MenuDto> dtoList = MapperForBeamo.INSTANCE.menu_To_List_DTO(byR_Seq);
-        return ResponseEntity.ok(dtoList);
+        return ResponseEntity.ok(restaurantService.getRML(seq));
     }
 }

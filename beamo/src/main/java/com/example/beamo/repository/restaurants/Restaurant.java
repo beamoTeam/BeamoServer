@@ -40,6 +40,10 @@ public class Restaurant {
     @Column(name = "max_member")
     private short maxMember;
 
+    @Column(name = "min_price")
+    private short minPrice;
+
+    private float rating;
 
     private int phone;
 

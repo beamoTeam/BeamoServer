@@ -24,6 +24,10 @@ public class RestaurantDto {
 
     private short maxMember;
 
+    private short minPrice;
+
+    private float rating;
+
     private List<Menu> menuList = new ArrayList<>();
 
     private int phone;
