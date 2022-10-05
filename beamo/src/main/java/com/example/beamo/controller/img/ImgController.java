@@ -33,6 +33,7 @@ public class ImgController {
 
         }catch (IOException e) {
             e.printStackTrace();
+            result = new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         return result;
