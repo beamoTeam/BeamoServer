@@ -1,11 +1,6 @@
 package com.example.beamo.dto.chat;
 
-import com.example.beamo.repository.chats.ChatInfo;
-import com.example.beamo.repository.users.Users;
 import lombok.*;
-
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 
 @Getter
 @Setter

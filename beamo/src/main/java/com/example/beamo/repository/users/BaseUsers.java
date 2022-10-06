@@ -3,7 +3,6 @@ package com.example.beamo.repository.users;
 import javax.persistence.MappedSuperclass;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

@@ -2,7 +2,6 @@ package com.example.beamo.repository.baskets;
 
 import com.example.beamo.repository.baskets.menu.BasketMenu;
 import com.example.beamo.repository.chats.ChatRoom;
-import com.example.beamo.repository.restaurants.menu.Menu;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 

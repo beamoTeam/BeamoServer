@@ -2,9 +2,6 @@ package com.example.beamo.dto.menu;
 
 import lombok.*;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-
 @Getter @Setter @Builder
 @AllArgsConstructor
 @NoArgsConstructor

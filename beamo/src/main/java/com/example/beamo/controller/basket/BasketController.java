@@ -8,7 +8,6 @@ import com.example.beamo.repository.baskets.Basket;
 import com.example.beamo.repository.baskets.BasketRepository;
 import com.example.beamo.repository.baskets.menu.BasketMenu;
 import com.example.beamo.repository.baskets.menu.BasketMenuRepository;
-import com.example.beamo.repository.chats.ChatInfo;
 import com.example.beamo.repository.chats.ChatInfoRepository;
 import com.example.beamo.repository.chats.ChatRoom;
 import com.example.beamo.repository.chats.ChatRoomRepository;
