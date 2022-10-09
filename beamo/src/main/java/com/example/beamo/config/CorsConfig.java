@@ -13,7 +13,7 @@ public class CorsConfig {
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
+        config.setAllowCredentials(true); //서버 응답할 때 json을 자바스크립트에서 처리할 수 있게 할지 설정
         config.addAllowedOriginPattern("*");
         config.addAllowedHeader("*"); //(1)
         config.addExposedHeader("*"); //(2)
