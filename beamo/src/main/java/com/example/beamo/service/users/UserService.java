@@ -9,6 +9,7 @@ import com.example.beamo.repository.users.UsersRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -24,7 +25,10 @@ import java.util.Date;
 public class UserService {
 
     @Autowired
-    UsersRepository userRepository; //(1)
+    UsersRepository userRepository;
+
+    @Value("${jwt.secret}")
+    String SECRET_KEY;
 
     public String saveUserAndGetToken(String token) {
 
@@ -65,7 +69,7 @@ public class UserService {
                 .withClaim("nickname", user.getName())
 
                 //(2-5)
-                .sign(Algorithm.HMAC512(JwtProperties.SECRET));
+                .sign(Algorithm.HMAC512(SECRET_KEY));
 
         return jwtToken; //(2-6)
     }
