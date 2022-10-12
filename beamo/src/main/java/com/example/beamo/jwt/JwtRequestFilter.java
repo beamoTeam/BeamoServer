@@ -2,10 +2,10 @@ package com.example.beamo.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.example.beamo.repository.users.UsersRepository;
+import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -19,6 +19,7 @@ import java.io.IOException;
 
 @RequiredArgsConstructor
 @Component
+@Slf4j
 public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Value("${jwt.secret}")
@@ -28,8 +29,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     UsersRepository userRepository;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
-        System.out.println("1");
+        System.out.println("jwt");
         String jwtHeader = ((HttpServletRequest)request).getHeader(JwtProperties.HEADER_STRING);
 
         if(jwtHeader == null || !jwtHeader.startsWith(JwtProperties.TOKEN_PREFIX)) {
@@ -44,17 +44,31 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         try {
             userCode = JWT.require(Algorithm.HMAC512(SECRET_KEY)).build().verify(token)
                     .getClaim("id").asLong();
-
-        } catch (TokenExpiredException e) {
+        } catch (SecurityException | MalformedJwtException e) {
+            request.setAttribute("exception", ExceptionCode.WRONG_TOKEN.getCode());
+        } catch (ExpiredJwtException e) {
+            request.setAttribute("exception", ExceptionCode.EXPIRED_TOKEN.getCode());
+        } catch (UnsupportedJwtException e) {
+            request.setAttribute("exception", ExceptionCode.UNSUPPORTED_TOKEN.getCode());
+        } catch (IllegalArgumentException e) {
+            request.setAttribute("exception", ExceptionCode.IllegalArgumentException.getCode());
+        } catch (Exception e) {
+            log.error("================================================");
+            log.error("JwtFilter - doFilterInternal() 오류발생");
+            log.error("token : {}", token);
+            log.error("Exception Message : {}", e.getMessage());
+            log.error("Exception StackTrace : {");
             e.printStackTrace();
-            request.setAttribute(JwtProperties.HEADER_STRING, "토큰이 만료되었습니다.");
-        } catch (JWTVerificationException e) {
-            e.printStackTrace();
-            request.setAttribute(JwtProperties.HEADER_STRING, "유효하지 않은 토큰입니다.");
+            log.error("}");
+            log.error("================================================");
+            request.setAttribute("exception", ExceptionCode.UNKNOWN_ERROR.getCode());
         }
+        System.out.println("오류 발생 ");
+        System.out.println(request.getAttribute("exception"));
 
         request.setAttribute("userCode", userCode);
 
         filterChain.doFilter(request, response);
     }
 }
+
