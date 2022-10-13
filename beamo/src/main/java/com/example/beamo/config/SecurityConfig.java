@@ -9,30 +9,38 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
 
 
 @Configuration
-@EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableWebSecurity(debug = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
-
     private final CorsFilter corsFilter;
+//    @Bean
+//    public JwtRequestFilter jwtRequestFilter() {
+//        return new JwtRequestFilter();
+//    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.headers().frameOptions().disable();
         http.csrf().disable()
-                .addFilter(corsFilter)
-                .authorizeRequests()
-                .antMatchers("/").permitAll()
-                .antMatchers("/**").permitAll()
-                .antMatchers("/api/**").permitAll()
-                .anyRequest().permitAll()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
+                .and()
+                .httpBasic().disable()
+                .formLogin().disable()
+                .addFilter(corsFilter);
+
+        http.authorizeRequests()
+                .anyRequest()
+                .permitAll()
         ;
-//        http.addFilterBefore(new JwtRequestFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JwtRequestFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }

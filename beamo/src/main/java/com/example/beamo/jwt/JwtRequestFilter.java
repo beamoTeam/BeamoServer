@@ -2,7 +2,9 @@ package com.example.beamo.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.example.beamo.repository.users.UsersRepository;
+import com.nimbusds.jose.shaded.json.JSONObject;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,24 +31,25 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     UsersRepository userRepository;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        System.out.println("jwt");
+        System.out.println("jwtRequset");
         String jwtHeader = ((HttpServletRequest)request).getHeader(JwtProperties.HEADER_STRING);
 
         if(jwtHeader == null || !jwtHeader.startsWith(JwtProperties.TOKEN_PREFIX)) {
             filterChain.doFilter(request, response);
             return;
         }
-
         String token = jwtHeader.replace(JwtProperties.TOKEN_PREFIX, "");
 
         Long userCode = null;
 
         try {
+            log.info("try_in token : " + token);
             userCode = JWT.require(Algorithm.HMAC512(SECRET_KEY)).build().verify(token)
                     .getClaim("id").asLong();
+            log.info("userCode : "+String.valueOf(userCode));
         } catch (SecurityException | MalformedJwtException e) {
             request.setAttribute("exception", ExceptionCode.WRONG_TOKEN.getCode());
-        } catch (ExpiredJwtException e) {
+        } catch (TokenExpiredException e) {
             request.setAttribute("exception", ExceptionCode.EXPIRED_TOKEN.getCode());
         } catch (UnsupportedJwtException e) {
             request.setAttribute("exception", ExceptionCode.UNSUPPORTED_TOKEN.getCode());
@@ -54,19 +57,19 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             request.setAttribute("exception", ExceptionCode.IllegalArgumentException.getCode());
         } catch (Exception e) {
             log.error("================================================");
+            log.error("userCode : "+String.valueOf(userCode));
             log.error("JwtFilter - doFilterInternal() 오류발생");
             log.error("token : {}", token);
             log.error("Exception Message : {}", e.getMessage());
+            log.error("exception : {}", request.getAttribute("exception"));
             log.error("Exception StackTrace : {");
             e.printStackTrace();
             log.error("}");
             log.error("================================================");
-            request.setAttribute("exception", ExceptionCode.UNKNOWN_ERROR.getCode());
+//            request.setAttribute("exception", ExceptionCode.UNKNOWN_ERROR.getCode());
         }
-        System.out.println("오류 발생 ");
-        System.out.println(request.getAttribute("exception"));
-
         request.setAttribute("userCode", userCode);
+        log.error("jwt last exception : {},{}", request.getAttribute("exception"), request.getAttribute("userCode"));
 
         filterChain.doFilter(request, response);
     }

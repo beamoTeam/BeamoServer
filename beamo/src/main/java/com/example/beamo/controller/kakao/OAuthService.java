@@ -45,7 +45,6 @@ public class OAuthService {
             //결과 코드가 200이라면 성공
             int responseCode = conn.getResponseCode();
             System.out.println("responseCode = " + responseCode);
-            System.out.println("service-1");
 
 
             //요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
@@ -53,7 +52,6 @@ public class OAuthService {
             String line = "";
             String result = "";
 
-            System.out.println("service-2");
 
             while ((line = br.readLine()) != null) {
                 result += line;

@@ -16,10 +16,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
-        System.out.println("Custom filter");
         String exception = (String)request.getAttribute("exception");
-
-        System.out.println("exception: "+exception);
 
         if(exception == null) {
             setResponse(response, ExceptionCode.UNKNOWN_ERROR);
@@ -35,6 +32,9 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         //지원되지 않는 토큰인 경우
         else if(exception.equals(ExceptionCode.UNSUPPORTED_TOKEN.getCode())) {
             setResponse(response, ExceptionCode.UNSUPPORTED_TOKEN);
+        }
+        else if(exception.equals(ExceptionCode.IllegalArgumentException.getCode())) {
+            setResponse(response, ExceptionCode.IllegalArgumentException);
         }
         else {
             setResponse(response, ExceptionCode.ACCESS_DENIED);
