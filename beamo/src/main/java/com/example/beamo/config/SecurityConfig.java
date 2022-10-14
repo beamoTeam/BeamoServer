@@ -35,9 +35,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .httpBasic().disable()
                 .formLogin().disable()
-                .addFilter(corsFilter);
-
+                .addFilter(corsFilter)
+                ;
         http.authorizeRequests()
+//                .antMatchers("/api/menu/*")
+//                .authenticated()
                 .anyRequest()
                 .permitAll()
         ;

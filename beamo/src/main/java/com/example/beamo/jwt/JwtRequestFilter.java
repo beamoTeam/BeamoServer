@@ -31,7 +31,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     UsersRepository userRepository;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        System.out.println("jwtRequset");
         String jwtHeader = ((HttpServletRequest)request).getHeader(JwtProperties.HEADER_STRING);
 
         if(jwtHeader == null || !jwtHeader.startsWith(JwtProperties.TOKEN_PREFIX)) {
@@ -43,10 +42,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         Long userCode = null;
 
         try {
-            log.info("try_in token : " + token);
             userCode = JWT.require(Algorithm.HMAC512(SECRET_KEY)).build().verify(token)
                     .getClaim("id").asLong();
-            log.info("userCode : "+String.valueOf(userCode));
         } catch (SecurityException | MalformedJwtException e) {
             request.setAttribute("exception", ExceptionCode.WRONG_TOKEN.getCode());
         } catch (TokenExpiredException e) {
@@ -57,8 +54,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             request.setAttribute("exception", ExceptionCode.IllegalArgumentException.getCode());
         } catch (Exception e) {
             log.error("================================================");
-            log.error("userCode : "+String.valueOf(userCode));
             log.error("JwtFilter - doFilterInternal() 오류발생");
+            log.error("userCode : "+String.valueOf(userCode));
             log.error("token : {}", token);
             log.error("Exception Message : {}", e.getMessage());
             log.error("exception : {}", request.getAttribute("exception"));
@@ -66,11 +63,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             e.printStackTrace();
             log.error("}");
             log.error("================================================");
-//            request.setAttribute("exception", ExceptionCode.UNKNOWN_ERROR.getCode());
         }
         request.setAttribute("userCode", userCode);
         log.error("jwt last exception : {},{}", request.getAttribute("exception"), request.getAttribute("userCode"));
-
         filterChain.doFilter(request, response);
     }
 }
