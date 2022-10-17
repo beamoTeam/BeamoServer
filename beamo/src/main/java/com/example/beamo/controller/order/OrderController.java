@@ -1,5 +1,6 @@
 package com.example.beamo.controller.order;
 
+import com.example.beamo.dto.chat.MsgDto;
 import com.example.beamo.dto.order.OrderInfoDto;
 import com.example.beamo.dto.order.OrderMenuListDto;
 import com.example.beamo.repository.baskets.Basket;
@@ -62,6 +63,13 @@ public class OrderController {
         }
         long seq = userService.getUser(request).getSeq();
         return ResponseEntity.ok(orderRepository.findListByU_seq(seq));
+    }
+
+    @GetMapping("/test/{u_seq}/{r_seq}")
+    public ResponseEntity getTest(HttpServletRequest request, @PathVariable("u_seq") Long u_seq, @PathVariable("r_seq") Long r_seq) {
+        ChatRoom chatRoom = chatRoomRepository.findByU_seqAndC_I_Seq(u_seq, r_seq);
+        Basket basket = basketRepository.findByChatRoom(chatRoom);
+        return ResponseEntity.ok(basket);
     }
 
     @ApiOperation(value = "JWT 유저번호로 바스켓 내용 그대로 주문 넣기")

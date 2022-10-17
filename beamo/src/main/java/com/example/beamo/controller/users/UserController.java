@@ -35,6 +35,9 @@ public class UserController {
     @GetMapping("/info")
     ResponseEntity getUsersBySeq(HttpServletRequest request) {
         if (userService.getUser(request) == null) {
+            System.out.println("jwt controller start");
+            System.out.println(request.getAttribute("userCode"));
+            System.out.println(request);
             return new ResponseEntity<>("로그인이 필요합니다.", HttpStatus.UNAUTHORIZED);
         }
         Users users = usersRepository.findBuU_seq(userService.getUser(request).getSeq());
