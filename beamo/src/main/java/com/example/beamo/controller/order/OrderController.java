@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import springfox.documentation.spring.web.json.Json;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
@@ -69,11 +70,16 @@ public class OrderController {
     public ResponseEntity getTest(HttpServletRequest request, @PathVariable("u_seq") Long u_seq, @PathVariable("r_seq") Long r_seq) {
         ChatRoom chatRoom = chatRoomRepository.findByU_seqAndC_I_Seq(u_seq, r_seq);
         Basket basket = basketRepository.findByChatRoom(chatRoom);
-        return ResponseEntity.ok(basket);
+        List<BasketMenu> bl = basketRepository.findMenuList_ByU_seqC_seq(u_seq,r_seq);
+        MsgDto msgDto = new MsgDto();
+        msgDto.setSender(usersRepository.findBuU_seq(u_seq).getName());
+        msgDto.setRoomNum(r_seq.intValue());
+        msgDto.setBasketMenuList(bl);
+        return ResponseEntity.ok(msgDto);
     }
 
     @ApiOperation(value = "JWT 유저번호로 바스켓 내용 그대로 주문 넣기")
-    @PostMapping("/{room_seq}")
+    @GetMapping("/{room_seq}")
     public ResponseEntity orderByU_seq(HttpServletRequest request, @PathVariable("room_seq") Long c_seq) {
         if (userService.getUser(request) == null) {
             return new ResponseEntity<>("로그인이 필요합니다.", HttpStatus.UNAUTHORIZED);

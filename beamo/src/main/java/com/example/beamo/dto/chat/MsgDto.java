@@ -1,16 +1,15 @@
 package com.example.beamo.dto.chat;
 
+import com.example.beamo.repository.baskets.menu.BasketMenu;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class MsgDto {
-        private String id;
-        private String msg;
         private String sender;
-        private String receiver;
         private Integer roomNum;
-
-        private LocalDateTime createdAt;
+        private List<BasketMenu> basketMenuList = new ArrayList<>();
 }
