@@ -82,7 +82,7 @@ public class ChatRoomController {
             ChatInfo chatInfo = ChatInfo.builder()
                     .address(chatInfoDto.getAddress())
                     .detail_address(chatInfoDto.getDetail_address())
-                    .name(restaurant.getName() +" - "+chatInfoDto.getDetail_address())
+                    .name(restaurant.getName())
                     .orderTime(chatInfoDto.getOrderTime())
                     .restaurant(restaurant)
                     .build();
