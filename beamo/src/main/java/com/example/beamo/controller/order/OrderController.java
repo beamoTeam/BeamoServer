@@ -68,8 +68,6 @@ public class OrderController {
 
     @GetMapping("/test/{u_seq}/{r_seq}")
     public ResponseEntity getTest(HttpServletRequest request, @PathVariable("u_seq") Long u_seq, @PathVariable("r_seq") Long r_seq) {
-        ChatRoom chatRoom = chatRoomRepository.findByU_seqAndC_I_Seq(u_seq, r_seq);
-        Basket basket = basketRepository.findByChatRoom(chatRoom);
         List<BasketMenu> bl = basketRepository.findMenuList_ByU_seqC_seq(u_seq,r_seq);
         MsgDto msgDto = new MsgDto();
         msgDto.setSender(usersRepository.findBuU_seq(u_seq).getName());
@@ -78,7 +76,7 @@ public class OrderController {
         return ResponseEntity.ok(msgDto);
     }
 
-    @ApiOperation(value = "JWT 유저번호로 바스켓 내용 그대로 주문 넣기")
+    @ApiOperation(value = "JWT 유저번호로 바스켓 내용 결제 ")
     @GetMapping("/{room_seq}")
     public ResponseEntity orderByU_seq(HttpServletRequest request, @PathVariable("room_seq") Long c_seq) {
         if (userService.getUser(request) == null) {
@@ -128,12 +126,14 @@ public class OrderController {
 //                    }
 //                    orderRepository.saveAll(ls);
 //                }
-
-                return ResponseEntity.ok(order);
+                List<BasketMenu> bl = basketRepository.findMenuList_ByU_seqC_seq(u_seq, c_seq);
+                MsgDto msgDto = new MsgDto();
+                msgDto.setSender(usersRepository.findBuU_seq(u_seq).getName());
+                msgDto.setRoomNum(c_seq.intValue());
+                msgDto.setBasketMenuList(bl);
+                return ResponseEntity.ok(msgDto);
             }
-
             return ResponseEntity.ok().body("이미 결제되었습니다. 다시 확인하세요.");
-
         }
     }
 
