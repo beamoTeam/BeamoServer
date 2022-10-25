@@ -1,6 +1,7 @@
 package com.example.beamo.controller.order;
 
 import com.example.beamo.dto.chat.MsgDto;
+import com.example.beamo.dto.order.OrderForLogDto;
 import com.example.beamo.dto.order.OrderInfoDto;
 import com.example.beamo.dto.order.OrderMenuListDto;
 import com.example.beamo.repository.baskets.Basket;
@@ -63,7 +64,23 @@ public class OrderController {
             return new ResponseEntity<>("로그인이 필요합니다.", HttpStatus.UNAUTHORIZED);
         }
         long seq = userService.getUser(request).getSeq();
-        return ResponseEntity.ok(orderRepository.findListByU_seq(seq));
+
+        List<Order> ol = orderRepository.findListByU_seq(seq);
+
+        OrderForLogDto orderLog = new OrderForLogDto();
+        List<OrderForLogDto> logDtoList = new ArrayList<>();
+        for (Order cr : ol) {
+            ChatRoom chatRoom = cr.getChatRoom();
+            Long c_seq = chatRoom.getSeq();
+            List<BasketMenu> bl = basketRepository.findMenuList_ByU_seqC_seq(seq, c_seq);
+            orderLog.setOrder(orderRepository.findByChatRoom(chatRoom));
+            orderLog.setRestaurant(cr.getRestaurant());
+            orderLog.setChatInfo(chatRoom.getChatInfo());
+            orderLog.setBasketMenuList(bl);
+
+            logDtoList.add(orderLog);
+        }
+        return ResponseEntity.ok(logDtoList);
     }
 
     @GetMapping("/test/{u_seq}/{r_seq}")
