@@ -83,16 +83,6 @@ public class OrderController {
         return ResponseEntity.ok(logDtoList);
     }
 
-    @GetMapping("/test/{u_seq}/{r_seq}")
-    public ResponseEntity getTest(HttpServletRequest request, @PathVariable("u_seq") Long u_seq, @PathVariable("r_seq") Long r_seq) {
-        List<BasketMenu> bl = basketRepository.findMenuList_ByU_seqC_seq(u_seq,r_seq);
-        MsgDto msgDto = new MsgDto();
-        msgDto.setSender(usersRepository.findBuU_seq(u_seq).getName());
-        msgDto.setRoomNum(r_seq.intValue());
-        msgDto.setBasketMenuList(bl);
-        return ResponseEntity.ok(msgDto);
-    }
-
     @ApiOperation(value = "JWT 유저번호로 바스켓 내용 결제 ")
     @GetMapping("/{room_seq}")
     public ResponseEntity orderByU_seq(HttpServletRequest request, @PathVariable("room_seq") Long c_seq) {
