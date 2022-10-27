@@ -27,25 +27,31 @@ public interface MapperForBeamo {
     // basketMenu
     @Mapping(target = "basket_seq", source = "basket.seq")
     BasketMenuDto basketMenu_To_DTO(BasketMenu basketMenu);
+
     @Mapping(target = "basket.seq", source = "basket_seq")
     BasketMenu basketMenu_To_Entity(BasketMenuDto basketMenuDto);
 
     // baket
     @Mapping(target = "chatRoom", source = "chatRoom")
     BasketDto basket_To_DTO(Basket basket);
+
     @Mapping(target = "chatRoom", source = "chatRoom")
     Basket basket_TO_Entity(BasketDto basketDto);
 
-//    // menu
+    //    // menu
     @Mapping(target = "restaurant_seq", source = "restaurant.seq")
     MenuDto menu_To_DTO(Menu menu);
+
     List<MenuDto> menu_To_List_DTO(List<Menu> menus);
+
     @Mapping(target = "restaurant.seq", source = "restaurant_seq")
     Menu menu_To_Entity(MenuDto menuDto);
-   //order
+
+    //order
 //    @Mapping(target = "restaurant_seq", source = "restaurant.seq")
     OrderDto order_To_DTO(Order order);
-//    @Mapping(target = "restaurant.seq", source = "restaurant_seq")
+
+    //    @Mapping(target = "restaurant.seq", source = "restaurant_seq")
     Order order_To_Entity(OrderDto orderDto);
 
     //ChatRoom

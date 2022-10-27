@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @Controller
-@RequestMapping(value = "/api/restaurant" , produces = "application/json")
+@RequestMapping(value = "/api/restaurant", produces = "application/json")
 public class RestaurantController {
     @Autowired
     RestaurantRepository restaurantRepository;
@@ -32,6 +32,7 @@ public class RestaurantController {
         List<Restaurant> restaurantList = restaurantRepository.findAll();
         return ResponseEntity.ok(restaurantList);
     }
+
     @ApiOperation(value = "음식점 전체 메뉴 출려 ")
     @GetMapping("/{r_seq}/menu")
     public ResponseEntity getMenu(@PathVariable("r_seq") Long seq) {

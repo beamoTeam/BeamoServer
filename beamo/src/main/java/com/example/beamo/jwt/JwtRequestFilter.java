@@ -29,11 +29,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Autowired
     UsersRepository userRepository;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String jwtHeader = ((HttpServletRequest)request).getHeader(JwtProperties.HEADER_STRING);
+        String jwtHeader = ((HttpServletRequest) request).getHeader(JwtProperties.HEADER_STRING);
 
-        if(jwtHeader == null || !jwtHeader.startsWith(JwtProperties.TOKEN_PREFIX)) {
+        if (jwtHeader == null || !jwtHeader.startsWith(JwtProperties.TOKEN_PREFIX)) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -55,7 +56,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             log.error("================================================");
             log.error("JwtFilter - doFilterInternal() 오류발생");
-            log.error("userCode : "+String.valueOf(userCode));
+            log.error("userCode : " + String.valueOf(userCode));
             log.error("token : {}", token);
             log.error("Exception Message : {}", e.getMessage());
             log.error("exception : {}", request.getAttribute("exception"));

@@ -2,7 +2,9 @@ package com.example.beamo.dto.menu;
 
 import lombok.*;
 
-@Getter @Setter @Builder
+@Getter
+@Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class BasketMenuDto {

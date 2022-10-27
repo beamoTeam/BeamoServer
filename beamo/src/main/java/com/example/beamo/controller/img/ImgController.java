@@ -19,7 +19,7 @@ public class ImgController {
     private String pwd_img;
 
     @GetMapping("/img")
-    public ResponseEntity<byte[]> getImage(String fileName){
+    public ResponseEntity<byte[]> getImage(String fileName) {
         File file = new File(pwd_img + fileName);
         ResponseEntity<byte[]> result = null;
 
@@ -31,7 +31,7 @@ public class ImgController {
 
             result = new ResponseEntity<>(FileCopyUtils.copyToByteArray(file), header, HttpStatus.OK);
 
-        }catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             result = new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

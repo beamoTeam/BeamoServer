@@ -39,7 +39,7 @@ public class UserService {
         Users user = userRepository.findByEmail(profile.getKakao_account().getEmail());
 
         //(3)
-        if(user == null) {
+        if (user == null) {
             user = Users.builder()
                     .seq(profile.getId())
                     //(4)
@@ -62,7 +62,7 @@ public class UserService {
 
                 //(2-3)
                 .withSubject(user.getEmail())
-                .withExpiresAt(new Date(System.currentTimeMillis()+ JwtProperties.EXPIRATION_TIME))
+                .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRATION_TIME))
 
                 //(2-4)
                 .withClaim("id", user.getSeq())
@@ -110,6 +110,7 @@ public class UserService {
 
         return kakaoProfile;
     }
+
     public Users getUser(HttpServletRequest request) { //(1)
         //(2)
         Long userCode = (Long) request.getAttribute("userCode");

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface RestaurantRepository extends JpaRepository<Restaurant, Long>{
+public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
     @Query(value = "select r from Restaurant as r where r.seq=?1")
     Restaurant findBySeq(Long seq);
 

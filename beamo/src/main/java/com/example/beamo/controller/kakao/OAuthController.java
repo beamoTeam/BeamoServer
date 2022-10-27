@@ -27,7 +27,7 @@ public class OAuthController {
     UserService userService;
 
     @ApiOperation(value = "로그인 및 JWT 토큰 요청")
-    @GetMapping(value="/kakao")
+    @GetMapping(value = "/kakao")
     public ResponseEntity login(@RequestParam("code") String code) {
         System.out.println(code);
         String access_Token = oAuthService.getKakaoAccesToken(code);
@@ -41,26 +41,25 @@ public class OAuthController {
 
             HttpHeaders headers = new HttpHeaders();
             headers.add(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + jwtToken);
-            System.out.println("jwtToken : "+jwtToken);
+            System.out.println("jwtToken : " + jwtToken);
             return ResponseEntity.ok().body(jwtToken);
-        }
-        else {
+        } else {
             System.out.println("fail");
             return new ResponseEntity<>("login fail", HttpStatus.NOT_FOUND);
         }
     }
 
-//    @ApiOperation(value = "JWT 로 회원 정보 조회")
+    //    @ApiOperation(value = "JWT 로 회원 정보 조회")
     @GetMapping("/me")
     public ResponseEntity<Object> getCurrentUser(HttpServletRequest request) { //(1)
 
         //(2)
-        System.out.println("get me request : "+request);
-        System.out.println("get me request.authorization : "+request.getHeader("authorization"));
+        System.out.println("get me request : " + request);
+        System.out.println("get me request.authorization : " + request.getHeader("authorization"));
         Users user = userService.getUser(request);
 //        Long userCode = (Long) request.getAttribute("userCode");
-        System.out.println("user seq"+user.getSeq());
-        if(user != null) {
+        System.out.println("user seq" + user.getSeq());
+        if (user != null) {
             System.out.println(user.getName());
             System.out.println(user.getEmail());
         }
@@ -68,8 +67,8 @@ public class OAuthController {
         return ResponseEntity.ok().body(user);
     }
 
-    @GetMapping(value="/logout")
-    public Map<String, Object> logout(@RequestHeader Map<String, Object> requestHeader){
+    @GetMapping(value = "/logout")
+    public Map<String, Object> logout(@RequestHeader Map<String, Object> requestHeader) {
         System.out.println(requestHeader);
         System.out.println(requestHeader.get("authorization"));
         System.out.println("로그아웃 시도");

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping(value = "/api/menu" , produces = "application/json")
+@RequestMapping(value = "/api/menu", produces = "application/json")
 public class MenuController {
     @Autowired
     MenuRepository menuRepository;

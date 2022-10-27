@@ -4,4 +4,5 @@ import lombok.Getter;
 
 @Getter
 public class UsersDto {
-    private Long seq;}
+    private Long seq;
+}

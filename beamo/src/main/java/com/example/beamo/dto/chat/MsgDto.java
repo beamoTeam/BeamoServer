@@ -9,7 +9,7 @@ import java.util.List;
 
 @Data
 public class MsgDto {
-        private String sender;
-        private Integer roomNum;
-        private List<BasketMenu> basketMenuList = new ArrayList<>();
+    private String sender;
+    private Integer roomNum;
+    private List<BasketMenu> basketMenuList = new ArrayList<>();
 }

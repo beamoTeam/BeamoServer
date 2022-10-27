@@ -1,5 +1,7 @@
 package com.example.beamo.repository.baskets.menu;
+
 import lombok.*;
+
 import javax.persistence.*;
 
 @Entity

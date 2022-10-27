@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface ChatInfoRepository extends JpaRepository<ChatInfo, Long> {
 
-    @Query( value = "select c from ChatInfo as c where c.seq=?1")
+    @Query(value = "select c from ChatInfo as c where c.seq=?1")
     ChatInfo findBySeq(Long seq);
 
     List<ChatInfo> findByAddress(String address, Sort seq);

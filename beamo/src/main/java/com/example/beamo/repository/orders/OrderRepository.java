@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface OrderRepository extends JpaRepository <Order, Long> {
+public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query(value = "select order from Order as order where order.chatRoom.users.seq=?1")
     Order findByU_seq(Long seq);
 

@@ -33,7 +33,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @Controller
-@RequestMapping(value = "/api/order" , produces = "application/json")
+@RequestMapping(value = "/api/order", produces = "application/json")
 public class OrderController {
 
     @Autowired
@@ -89,7 +89,7 @@ public class OrderController {
         if (userService.getUser(request) == null) {
             return new ResponseEntity<>("로그인이 필요합니다.", HttpStatus.UNAUTHORIZED);
         }
-        long u_seq  = userService.getUser(request).getSeq();
+        long u_seq = userService.getUser(request).getSeq();
 
         ChatRoom chatRoom = chatRoomRepository.findByU_seqAndC_I_Seq(u_seq, c_seq);
         Basket basket = basketRepository.findByChatRoom(chatRoom);
@@ -98,9 +98,8 @@ public class OrderController {
 
         if (basket == null) {
             return ResponseEntity.badRequest().body("장바구니가 비어있습니다.");
-        }
-        else {
-            if(orderRepository.findByChatRoom(chatRoom) == null) {
+        } else {
+            if (orderRepository.findByChatRoom(chatRoom) == null) {
 
                 Order order = Order.builder()
                         .payAmount(basket.getTotal_amount())
@@ -113,11 +112,10 @@ public class OrderController {
                 orderRepository.save(order);
 
                 Users u = usersRepository.findBuU_seq(u_seq);
-                if (u.getPoint()-basket.getTotal_amount() < 0 ) {
+                if (u.getPoint() - basket.getTotal_amount() < 0) {
                     return ResponseEntity.badRequest().body("잔액이 부족합니다. 잔액을 확인해주세요");
-                }
-                else {
-                    u.setPoint(u.getPoint()-basket.getTotal_amount());
+                } else {
+                    u.setPoint(u.getPoint() - basket.getTotal_amount());
                     usersRepository.save(u);
                 }
 //                List<Order> ls = orderRepository.findListByC_seq(chatRoom.getSeq());
@@ -165,19 +163,19 @@ public class OrderController {
         int count = 0;
         int totalPrice = 0;
 
-        for( Order tmp : ls) {
-            if(tmp.getPayStatus() == 1){
+        for (Order tmp : ls) {
+            if (tmp.getPayStatus() == 1) {
                 count++;
             }
 //            if(tmp.getTotalStatus() == 1){
 //                return ResponseEntity.ok().body("주문 가능한 상태가 아님니다. 주문을 확인해주세요.");
 //            }
         }
-        if (count >= 2){
-            for( Order tmp : ls) {
+        if (count >= 2) {
+            for (Order tmp : ls) {
                 totalPrice += tmp.getPayAmount();
             }
-            for( Order tmp : ls) {
+            for (Order tmp : ls) {
                 tmp.setTotalStatus((short) 1);
                 tmp.setTotalAmount(totalPrice);
                 restaurant = tmp.getRestaurant();
@@ -186,14 +184,14 @@ public class OrderController {
             }
             List<Order> savedOrders = orderRepository.saveAll(ls);
 
-            for( Order tmp : ls) {
+            for (Order tmp : ls) {
                 nameList.add(tmp.getChatRoom().getUsers().getName());
                 list.add(tmp.getChatRoom().getUsers().getSeq());
             }
 
-            for( long i = 0 ; i<list.size() ; i++) {
-                bml = basketMenuRepository.findMLUC(list.get((int) i),seq);
-                oil.add( orderInfoDto.addInfo( nameList.get((int) i), bml, true) );
+            for (long i = 0; i < list.size(); i++) {
+                bml = basketMenuRepository.findMLUC(list.get((int) i), seq);
+                oil.add(orderInfoDto.addInfo(nameList.get((int) i), bml, true));
             }
 
             OrderMenuListDto oml = OrderMenuListDto.builder()
@@ -207,8 +205,7 @@ public class OrderController {
             omlList.add(oml);
 
             return ResponseEntity.ok(omlList);
-        }
-        else {
+        } else {
             return ResponseEntity.ok().body("주문 가능한 상태가 아님니다. 정상적으로 주문되지 않았습니다. 주문을 확인해주세요.");
         }
     }
@@ -228,11 +225,11 @@ public class OrderController {
         List<Order> orderList = orderRepository.findListByR_seq(seq);
 
 
-        for(Order tmp : orderList) {
+        for (Order tmp : orderList) {
             set.add(tmp.getChatRoom().getSeq());
         }
 
-        for(Object chatNum : set) {
+        for (Object chatNum : set) {
             List<OrderInfoDto> oil = new ArrayList<>();
             int totalPrice = 0;
             LocalDateTime payDatetime = null;
@@ -242,16 +239,16 @@ public class OrderController {
             List<Order> ls = orderRepository.findListByC_seq((Long) chatNum);
 
             boolean pass = false;
-            for( Order tmp : ls) {
-                if(tmp.getTotalStatus()==1){
+            for (Order tmp : ls) {
+                if (tmp.getTotalStatus() == 1) {
                     totalPrice = tmp.getTotalAmount();
                     payDatetime = tmp.getUpdatedDateTime();
                     address = tmp.getChatRoom().getChatInfo().getAddress();
                     accepted = tmp.getPayMethod();
                     c_seq = (long) chatNum;
                     bml = basketMenuRepository.findMLUC(tmp.getChatRoom().getUsers().getSeq(), (Long) chatNum);
-                    oil.add( orderInfoDto.addInfo( tmp.getChatRoom().getUsers().getName(), bml, true) );
-                }else {
+                    oil.add(orderInfoDto.addInfo(tmp.getChatRoom().getUsers().getName(), bml, true));
+                } else {
                     pass = true;
                 }
             }
@@ -277,7 +274,7 @@ public class OrderController {
     @GetMapping("/accepted/{room_seq}")
     public ResponseEntity getAcceptedByC_seq(@PathVariable("room_seq") Long seq) {
         List<Order> ls = orderRepository.findListByC_seq(seq);
-        for( Order tmp : ls) {
+        for (Order tmp : ls) {
             tmp.setPayMethod("접수 완료");
         }
         orderRepository.saveAll(ls);

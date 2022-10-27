@@ -3,7 +3,9 @@ package com.example.beamo.repository.baskets.menu;
 import com.example.beamo.repository.baskets.Basket;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+
 import javax.persistence.*;
+
 @Entity
 @Setter
 @Builder

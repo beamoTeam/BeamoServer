@@ -45,8 +45,8 @@ public class Order {
     @Column(name = "pay_amount")
     private int payAmount;
 
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @Column(name = "pay_datetime",updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Column(name = "pay_datetime", updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime payDatetime;
 
     @Column(name = "total_status")
@@ -55,10 +55,10 @@ public class Order {
     @Column(name = "total_amount")
     private int totalAmount;
 
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @Column(name = "created_dt",updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Column(name = "created_dt", updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdDateTime;
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "updated_dt", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private LocalDateTime updatedDateTime;
 }

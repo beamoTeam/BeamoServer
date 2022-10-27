@@ -1,3 +1,4 @@
 package com.example.beamo.repository.restaurants;
-public class RestaurantRepositoryCustomImpl implements RestaurantRepositoryCustom{
+
+public class RestaurantRepositoryCustomImpl implements RestaurantRepositoryCustom {
 }

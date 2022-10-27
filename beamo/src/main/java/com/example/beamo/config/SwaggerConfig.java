@@ -21,7 +21,7 @@ import java.util.List;
 
 @Configuration
 @EnableSwagger2
-public class SwaggerConfig extends WebMvcConfigurationSupport{
+public class SwaggerConfig extends WebMvcConfigurationSupport {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -49,6 +49,7 @@ public class SwaggerConfig extends WebMvcConfigurationSupport{
                 .version("1.0")
                 .build();
     }
+
     private SecurityContext securityContext() {
         return SecurityContext.builder()
                 .securityReferences(defaultAuth())

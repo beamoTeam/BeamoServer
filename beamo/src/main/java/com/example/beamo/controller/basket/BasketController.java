@@ -28,7 +28,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping(value = "/api/basket" , produces = "application/json")
+@RequestMapping(value = "/api/basket", produces = "application/json")
 public class BasketController {
 
     @Autowired
@@ -108,8 +108,7 @@ public class BasketController {
         try {
             basketMenuRepository.save(basketMenu);
             resultDto = MapperForBeamo.INSTANCE.basketMenu_To_DTO(basketMenu);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body("바구니에 담기지 않았습니다. 다시 확인해주세요.");
         }
         return ResponseEntity.ok(resultDto);
@@ -123,7 +122,7 @@ public class BasketController {
         }
         long u_seq = userService.getUser(request).getSeq();
         ChatRoom chatRoom = chatRoomRepository.findByU_seqAndC_I_Seq(u_seq, c_seq);
-        if(chatRoom == null) {
+        if (chatRoom == null) {
             return ResponseEntity.badRequest().body("room 이 없어 바구니가 존재하지 않았습니다. 다시 확인해주세요.");
         }
 
@@ -137,20 +136,19 @@ public class BasketController {
 
         long restaurant_seq = 0;
 
-        for(BasketMenu bb :ls){
-            int price = bb.getCount()*bb.getPrice();
+        for (BasketMenu bb : ls) {
+            int price = bb.getCount() * bb.getPrice();
             basketDto.toTotal(price);
             restaurant_seq = bb.getRestaurant_seq();
         }
 
-        if(ls.isEmpty() ){
+        if (ls.isEmpty()) {
             basketDto.setDeliveryPrice((short) 0);
-        }
-        else {
+        } else {
             short deliveryPrice = restaurantRepository.findBySeq(restaurant_seq).getDeliveryPrice();
             basketDto.setDeliveryPrice((short) 0);
             basketDto.setDeliveryPrice(deliveryPrice);
-            basketDto.setTotal_amount_with_delivery(deliveryPrice+basketDto.getTotal_amount());
+            basketDto.setTotal_amount_with_delivery(deliveryPrice + basketDto.getTotal_amount());
         }
 
         lb.setTotal_amount(basketDto.getTotal_amount());

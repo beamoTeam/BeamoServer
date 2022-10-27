@@ -18,7 +18,7 @@ public class RestaurantService {
     @Autowired
     MenuRepository menuRepository;
 
-    public RestaurantInfoWithMenuDto getRML(Long seq){
+    public RestaurantInfoWithMenuDto getRML(Long seq) {
         Restaurant restaurant = restaurantRepository.findBySeq(seq);
         List<Menu> menuList = menuRepository.findByRestaurant(seq);
         RestaurantInfoWithMenuDto dto = new RestaurantInfoWithMenuDto();
