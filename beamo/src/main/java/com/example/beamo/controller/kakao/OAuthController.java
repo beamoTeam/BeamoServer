@@ -17,7 +17,7 @@ import java.util.Map;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping(value = "/oauth", produces = "application/json")
+@RequestMapping(value = "/api/oauth", produces = "application/json")
 public class OAuthController {
 
     @Autowired
