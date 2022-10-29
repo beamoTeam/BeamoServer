@@ -25,7 +25,7 @@ public class Users {
     @Column(length = 300)
     private String profile;
 
-    private int point;
+    private int point = 1_000_000;
 
     @Column(name = "acount_name")
     private String acountName;
