@@ -46,6 +46,7 @@ public class UserService {
                     .profile(profile.getKakao_account().getProfile().getProfile_image_url())
                     .name(profile.getKakao_account().getProfile().getNickname())
                     .email(profile.getKakao_account().getEmail())
+                    .point(1000000)
                     //(5)
                     .userRole("ROLE_USER").build();
 
