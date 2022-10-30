@@ -131,7 +131,7 @@ public class ChatRoomController {
 
     @ApiOperation(value = "JWT 유저번호, 방 번호 방 나가기")
     @GetMapping("/{room_seq}")
-    public ResponseEntity leftRoom(HttpServletRequest request, @PathVariable("room_seq") Long c_seq) {
+    public ResponseEntity leaveRoom(HttpServletRequest request, @PathVariable("room_seq") Long c_seq) {
         if (userService.getUser(request) == null) {
             return new ResponseEntity<>("로그인이 필요합니다.", HttpStatus.UNAUTHORIZED);
         }
