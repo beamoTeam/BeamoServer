@@ -80,33 +80,33 @@ public class ChatRoomController {
 
         if (user == null) {
             return ResponseEntity.badRequest().body("유저 정보가 없습니다. 확인해주세요.");
-        } else {
-            Restaurant restaurant = restaurantRepository.findBySeq(chatInfoDto.getRestaurant_seq());
+        }
+        Restaurant restaurant = restaurantRepository.findBySeq(chatInfoDto.getRestaurant_seq());
 
-            ChatInfo chatInfo = ChatInfo.builder()
-                    .address(chatInfoDto.getAddress())
-                    .detail_address(chatInfoDto.getDetail_address())
-                    .name(restaurant.getName())
-                    .orderTime(chatInfoDto.getOrderTime())
-                    .restaurant(restaurant)
-                    .build();
-            long c_i_seq = chatInfoRepository.save(chatInfo).getSeq();
+        ChatInfo chatInfo = ChatInfo.builder()
+                .address(chatInfoDto.getAddress())
+                .detail_address(chatInfoDto.getDetail_address())
+                .name(restaurant.getName())
+                .orderTime(chatInfoDto.getOrderTime())
+                .restaurant(restaurant)
+                .build();
+        long c_i_seq = chatInfoRepository.save(chatInfo).getSeq();
 
-            ChatInfo findCI = chatInfoRepository.findBySeq(c_i_seq);
+        ChatInfo findCI = chatInfoRepository.findBySeq(c_i_seq);
 
-            chatRoomRepository.saveComposite_Primary_Keys(seq, c_i_seq);
+        chatRoomRepository.saveComposite_Primary_Keys(seq, c_i_seq);
 
-            ChatRoom chatRoom = chatRoomRepository.findByU_seqAndC_I_Seq(seq, c_i_seq);
-            Basket basket = Basket.builder()
-                    .chatRoom(chatRoom)
-                    .build();
-            basketRepository.save(basket);
+        ChatRoom chatRoom = chatRoomRepository.findByU_seqAndC_I_Seq(seq, c_i_seq);
+        Basket basket = Basket.builder()
+                .chatRoom(chatRoom)
+                .build();
+        basketRepository.save(basket);
 
 //            List<Menu> byR_Seq = menuRepository.findByRestaurant(restaurant.getSeq());
 //            List<MenuDto> menuList = MapperForBeamo.INSTANCE.menu_To_List_DTO(byR_Seq);
 
-            return ResponseEntity.ok(findCI);
-        }
+        return ResponseEntity.ok(findCI);
+
     }
 
     @ApiOperation(value = "JWT 유저번호로 방 들어가기")
@@ -146,7 +146,7 @@ public class ChatRoomController {
         if (chatRoom != null) {
             System.out.println("chat not null");
             Order order = orderRepository.findByU_seqC_seq(seq, c_seq);
-            if(order == null){
+            if (order == null) {
                 chatRoomRepository.deleteByU_seqAndC_I_Seq(seq, c_seq);
                 return new ResponseEntity<>("삭제 왼료", HttpStatus.NO_CONTENT);
             }
