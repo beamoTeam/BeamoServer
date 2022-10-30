@@ -18,6 +18,9 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query(value = "select order from Order as order where order.chatRoom.seq=?1")
     Order findByC_seq(Long seq);
 
+    @Query(value = "select order from Order as order where order.chatRoom.users.seq=?1 and order.chatRoom.seq=?2")
+    Order findByU_seqC_seq(Long seq, Long c_seq);
+
     @Query(value = "select order from Order as order where order.chatRoom.seq=?1")
     List<Order> findListByC_seq(Long seq);
 

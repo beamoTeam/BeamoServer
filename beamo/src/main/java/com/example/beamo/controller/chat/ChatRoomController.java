@@ -8,6 +8,8 @@ import com.example.beamo.repository.chats.ChatInfo;
 import com.example.beamo.repository.chats.ChatInfoRepository;
 import com.example.beamo.repository.chats.ChatRoom;
 import com.example.beamo.repository.chats.ChatRoomRepository;
+import com.example.beamo.repository.orders.Order;
+import com.example.beamo.repository.orders.OrderRepository;
 import com.example.beamo.repository.restaurants.Restaurant;
 import com.example.beamo.repository.restaurants.RestaurantRepository;
 import com.example.beamo.repository.restaurants.menu.MenuRepository;
@@ -51,6 +53,8 @@ public class ChatRoomController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    OrderRepository orderRepository;
 
     @ApiOperation(value = "모든 방 조회")
     @GetMapping
@@ -121,8 +125,32 @@ public class ChatRoomController {
                     .chatRoom(cr)
                     .build();
             basketRepository.save(basket);
-
         }
         return ResponseEntity.ok(chatInfoRepository.findBySeq(c_seq));
+    }
+
+    @ApiOperation(value = "JWT 유저번호, 방 번호 방 나가기")
+    @GetMapping("/{room_seq}")
+    public ResponseEntity leftRoom(HttpServletRequest request, @PathVariable("room_seq") Long c_seq) {
+        if (userService.getUser(request) == null) {
+            return new ResponseEntity<>("로그인이 필요합니다.", HttpStatus.UNAUTHORIZED);
+        }
+        long seq = userService.getUser(request).getSeq();
+        ChatRoom chatRoom = chatRoomRepository.findByU_seqAndC_I_Seq(seq, c_seq);
+        Basket basket = basketRepository.findBasket_ByU_seqC_seq(seq, c_seq);
+        if (basket != null) {
+            System.out.println("basket not null");
+            basketRepository.delete(basket);
+            System.out.println("basket 삭제 완");
+        }
+        if (chatRoom != null) {
+            System.out.println("chat not null");
+            Order order = orderRepository.findByU_seqC_seq(seq, c_seq);
+            if(order == null){
+                chatRoomRepository.deleteByU_seqAndC_I_Seq(seq, c_seq);
+                return new ResponseEntity<>("삭제 왼료", HttpStatus.NO_CONTENT);
+            }
+        }
+        return new ResponseEntity<>("나가실 방이 없습니다.", HttpStatus.NOT_FOUND);
     }
 }
