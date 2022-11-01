@@ -66,12 +66,12 @@ public class ChatRoomController {
     }
 
     @ApiOperation(value = "JWT 유저 방 조회")
-    @GetMapping("/user/{u_seq}")
-    public ResponseEntity getUserRooms(HttpServletRequest request, @PathVariable("u_seq") Long seq) {
-//        if (userService.getUser(request) == null) {
-//            return new ResponseEntity<>("로그인이 필요합니다.", HttpStatus.UNAUTHORIZED);
-//        }
-//        long seq = userService.getUser(request).getSeq();
+    @GetMapping("/user")
+    public ResponseEntity getUserRooms(HttpServletRequest request) {
+        if (userService.getUser(request) == null) {
+            return new ResponseEntity<>("로그인이 필요합니다.", HttpStatus.UNAUTHORIZED);
+        }
+        long seq = userService.getUser(request).getSeq();
         List<ChatRoom> chatRoomsList = chatRoomRepository.findByChatListU_seq(seq, Sort.by(Sort.Direction.DESC, "seq"));
         return ResponseEntity.ok(chatRoomsList);
     }
