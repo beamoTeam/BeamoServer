@@ -1,5 +1,6 @@
 package com.example.beamo.repository.chats;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -24,6 +25,9 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, ChatRoomId> 
 
     @Query(value = "select c from ChatRoom as c where c.seq=?1")
     List<ChatRoom> findByC_seq(Long seq);
+
+    @Query(value = "select c FROM ChatRoom as c WHERE c.users.seq=?1")
+    List<ChatRoom> findByChatListU_seq(Long u_seq, Sort seq);
 
     @Modifying
     @Query(value = "INSERT INTO beamo.chat_room\n" +

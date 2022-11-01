@@ -26,6 +26,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @RestController
 @Api(tags = {"room-controller"})
@@ -60,6 +63,17 @@ public class ChatRoomController {
     @GetMapping
     public ResponseEntity getAllRoom() {
         return ResponseEntity.ok(chatInfoRepository.findAll(Sort.by(Sort.Direction.DESC, "seq")));
+    }
+
+    @ApiOperation(value = "JWT 유저 방 조회")
+    @GetMapping("/user/{u_seq}")
+    public ResponseEntity getUserRooms(HttpServletRequest request, @PathVariable("u_seq") Long seq) {
+//        if (userService.getUser(request) == null) {
+//            return new ResponseEntity<>("로그인이 필요합니다.", HttpStatus.UNAUTHORIZED);
+//        }
+//        long seq = userService.getUser(request).getSeq();
+        List<ChatRoom> chatRoomsList = chatRoomRepository.findByChatListU_seq(seq, Sort.by(Sort.Direction.DESC, "seq"));
+        return ResponseEntity.ok(chatRoomsList);
     }
 
     @ApiOperation(value = "주소로 방 조회")
