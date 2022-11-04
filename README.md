@@ -1,5 +1,7 @@
 # 배모(배달할 사람 다 모여)
 
+## 배포 링크 : [http://www.dobbyteam.com](http://www.dobbyteam.com:3000/)
+
 ## **배달앱의 배달비와 최소 주문금액으로 인한 과소비 해결을 위한 < "배달비 쉐어 서비스" >**
 
 최근 ‘코로나바이러스’의 확산 이후 거리 두기와 인원 제한으로 인해 사람들이 야외 보다 집에 머무는 시간이 늘어났다. 따라서, 직접 음식점을 방문하기보다 집에서 배달 앱으로 음식을 주문하는 경우가 증가했고, 1인 가구, 맞벌이 부부 증가 추세 역시 배 달 음식을 이용하는 사용자 확대에 영향을 주었다. 배달 수요 급증으로 인해 라이더 인력수급에 대한 어려움이 발생했고 배달료는 인상되고 있다.
@@ -16,7 +18,7 @@
 
 [GitHub 규칙](./Document/Github-Rules.md)
 
-[API 명세](./Document/HTTP-API-명세.md) 및 [swagger](http://3.94.44.116:2999/swagger-ui/index.html#/)
+[API 명세](./Document/HTTP-API-명세.md) 및 [swagger](http://34.195.94.5:2999/swagger-ui/index.html#/)
 
 
 
