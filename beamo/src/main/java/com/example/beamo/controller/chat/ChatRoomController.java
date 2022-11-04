@@ -62,7 +62,8 @@ public class ChatRoomController {
     @ApiOperation(value = "모든 방 조회")
     @GetMapping
     public ResponseEntity getAllRoom() {
-        return ResponseEntity.ok(chatInfoRepository.findAll(Sort.by(Sort.Direction.DESC, "seq")));
+//        return ResponseEntity.ok(chatInfoRepository.findAll(Sort.by(Sort.Direction.DESC, "seq")));
+        return ResponseEntity.ok(chatInfoRepository.findAllAfterNow(Sort.by(Sort.Direction.DESC, "seq")));
     }
 
     @ApiOperation(value = "JWT 유저 방 조회")
