@@ -13,7 +13,7 @@ public interface ChatInfoRepository extends JpaRepository<ChatInfo, Long> {
     @Query(value = "select c from ChatInfo as c where c.seq=?1")
     ChatInfo findBySeq(Long seq);
 
-    @Query(value = "select c from ChatInfo as c where c.orderTime >= current_timestamp and c.isAbleToIn = true ")
+    @Query(value = "select c from ChatInfo as c where c.orderTime >= current_timestamp and c.isAbleToIn = TRUE")
     List<ChatInfo> findAllAfterNow(Sort seq);
 
     List<ChatInfo> findByAddress(String address, Sort seq);
