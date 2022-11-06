@@ -100,7 +100,6 @@ public class OrderController {
 
         Basket basket = basketRepository.findByChatRoom(chatRoom);
 
-        List<Order> ol = orderRepository.finListByChatRoom(chatRoom);
 
         Restaurant restaurant = restaurantRepository.findBySeq(chatRoom.getChatInfo().getRestaurant().getSeq());
 
@@ -126,8 +125,8 @@ public class OrderController {
                     orderRepository.save(order);
                     usersRepository.save(u);
 
-
-                    if (ol.size() >= restaurant.getMaxMember()-1) {
+                    List<Order> ls = orderRepository.findListByC_seq(c_seq);
+                    if (ls.size() >= restaurant.getMaxMember()) {
                         chatInfo.setAbleToIn(false);
                         chatInfoRepository.save(chatInfo);
                     }
