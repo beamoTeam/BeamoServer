@@ -129,6 +129,12 @@ public class OrderController {
                     if (ls.size() >= restaurant.getMaxMember()) {
                         chatInfo.setAbleToIn(false);
                         chatInfoRepository.save(chatInfo);
+
+                        for (Order tmp : ls) {
+                            tmp.setPayMethod("접수 완료");
+                        }
+                        orderRepository.saveAll(ls);
+
                     }
 
                 }
