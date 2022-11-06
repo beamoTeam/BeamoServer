@@ -8,6 +8,8 @@ import com.example.beamo.repository.baskets.Basket;
 import com.example.beamo.repository.baskets.BasketRepository;
 import com.example.beamo.repository.baskets.menu.BasketMenu;
 import com.example.beamo.repository.baskets.menu.BasketMenuRepository;
+import com.example.beamo.repository.chats.ChatInfo;
+import com.example.beamo.repository.chats.ChatInfoRepository;
 import com.example.beamo.repository.chats.ChatRoom;
 import com.example.beamo.repository.chats.ChatRoomRepository;
 import com.example.beamo.repository.orders.Order;
@@ -48,6 +50,8 @@ public class OrderController {
     @Autowired
     ChatRoomRepository chatRoomRepository;
 
+    @Autowired
+    ChatInfoRepository chatInfoRepository;
     @Autowired
     UsersRepository usersRepository;
 
@@ -92,6 +96,8 @@ public class OrderController {
         long u_seq = userService.getUser(request).getSeq();
 
         ChatRoom chatRoom = chatRoomRepository.findByU_seqAndC_I_Seq(u_seq, c_seq);
+        ChatInfo chatInfo = chatInfoRepository.findBySeq(chatRoom.getSeq());
+
         Basket basket = basketRepository.findByChatRoom(chatRoom);
 
         Restaurant restaurant = restaurantRepository.findBySeq(chatRoom.getChatInfo().getRestaurant().getSeq());
@@ -109,14 +115,21 @@ public class OrderController {
                         .totalStatus((short) 0)
                         .restaurant(restaurant)
                         .build();
-                orderRepository.save(order);
 
                 Users u = usersRepository.findBuU_seq(u_seq);
                 if (u.getPoint() - basket.getTotal_amount() < 0) {
                     return ResponseEntity.badRequest().body("잔액이 부족합니다. 잔액을 확인해주세요");
                 } else {
                     u.setPoint(u.getPoint() - basket.getTotal_amount());
+                    orderRepository.save(order);
                     usersRepository.save(u);
+
+                    List<Order> ol = orderRepository.finListByChatRoom(chatRoom);
+                    if (ol.size() >= restaurant.getMaxMember()) {
+                        chatInfo.setAbleToIn(false);
+                        chatInfoRepository.save(chatInfo);
+                    }
+
                 }
 //                List<Order> ls = orderRepository.findListByC_seq(chatRoom.getSeq());
 //                if(chatRoom.getChatInfo().getMaxPersonnel() == ls.size()) {

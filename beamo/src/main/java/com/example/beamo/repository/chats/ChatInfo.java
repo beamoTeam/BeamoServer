@@ -3,6 +3,7 @@ package com.example.beamo.repository.chats;
 import com.example.beamo.repository.restaurants.Restaurant;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.text.DecimalFormat;
@@ -31,6 +32,9 @@ public class ChatInfo {
 
     private DecimalFormat latitude;
     private DecimalFormat longitude;
+
+    @ColumnDefault("True")
+    private boolean isAbleToIn;
 //    private short maxPersonnel;
 //    private short currentMembers;
 
