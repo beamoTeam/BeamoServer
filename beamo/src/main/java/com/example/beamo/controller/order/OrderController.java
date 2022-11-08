@@ -132,6 +132,7 @@ public class OrderController {
 
                         for (Order tmp : ls) {
                             tmp.setPayMethod("접수 완료");
+                            tmp.setTotalStatus((short) 1);
                         }
                         orderRepository.saveAll(ls);
 
