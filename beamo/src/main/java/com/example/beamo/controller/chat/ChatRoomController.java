@@ -104,6 +104,7 @@ public class ChatRoomController {
                 .name(restaurant.getName())
                 .orderTime(chatInfoDto.getOrderTime())
                 .restaurant(restaurant)
+                .isAbleToIn(true)
                 .build();
         long c_i_seq = chatInfoRepository.save(chatInfo).getSeq();
 
