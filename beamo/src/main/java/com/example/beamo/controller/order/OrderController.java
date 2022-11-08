@@ -131,7 +131,7 @@ public class OrderController {
                         chatInfoRepository.save(chatInfo);
 
                         for (Order tmp : ls) {
-                            tmp.setPayMethod("접수 완료");
+                            tmp.setPayMethod("접수 대기");
                             tmp.setTotalStatus((short) 1);
                         }
                         orderRepository.saveAll(ls);
