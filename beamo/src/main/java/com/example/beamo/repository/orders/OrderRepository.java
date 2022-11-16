@@ -1,6 +1,7 @@
 package com.example.beamo.repository.orders;
 
 import com.example.beamo.repository.chats.ChatRoom;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -25,7 +26,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findListByC_seq(Long seq);
 
     @Query(value = "select order from Order as order where order.chatRoom.users.seq=?1")
-    List<Order> findListByU_seq(Long seq);
+    List<Order> findListByU_seq(long l, Sort seq);
 
     @Query(value = "select order from Order as order where order.restaurant.seq=?1")
     List<Order> findListByR_seq(Long seq);

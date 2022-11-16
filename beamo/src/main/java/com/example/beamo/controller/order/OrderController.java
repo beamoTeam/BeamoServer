@@ -21,6 +21,7 @@ import com.example.beamo.repository.users.UsersRepository;
 import com.example.beamo.service.users.UserService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -69,11 +70,11 @@ public class OrderController {
         }
         long seq = userService.getUser(request).getSeq();
 
-        List<Order> ol = orderRepository.findListByU_seq(seq);
+        List<Order> ol = orderRepository.findListByU_seq(seq, Sort.by(Sort.Direction.DESC, "seq"));
 
-        OrderForLogDto orderLog = new OrderForLogDto();
         List<OrderForLogDto> logDtoList = new ArrayList<>();
         for (Order cr : ol) {
+            OrderForLogDto orderLog = new OrderForLogDto();
             ChatRoom chatRoom = cr.getChatRoom();
             Long c_seq = chatRoom.getSeq();
             List<BasketMenu> bl = basketRepository.findMenuList_ByU_seqC_seq(seq, c_seq);
@@ -130,12 +131,16 @@ public class OrderController {
                         chatInfo.setAbleToIn(false);
                         chatInfoRepository.save(chatInfo);
 
+                        int totalAmount = 0;
                         for (Order tmp : ls) {
                             tmp.setPayMethod("접수 대기");
                             tmp.setTotalStatus((short) 1);
+                            totalAmount += tmp.getPayAmount();
+                        }
+                        for (Order tmp : ls) {
+                            tmp.setTotalAmount(totalAmount);
                         }
                         orderRepository.saveAll(ls);
-
                     }
 
                 }
@@ -237,9 +242,7 @@ public class OrderController {
 
         List<OrderMenuListDto> omlList = new ArrayList<>();
 
-
         Set set = new HashSet();
-
 
         OrderInfoDto orderInfoDto = new OrderInfoDto();
         List<BasketMenu> bml = new ArrayList<>();
