@@ -11,6 +11,7 @@ import com.example.beamo.repository.baskets.menu.BasketMenuRepository;
 import com.example.beamo.repository.chats.ChatInfoRepository;
 import com.example.beamo.repository.chats.ChatRoom;
 import com.example.beamo.repository.chats.ChatRoomRepository;
+import com.example.beamo.repository.orders.OrderRepository;
 import com.example.beamo.repository.restaurants.RestaurantRepository;
 import com.example.beamo.repository.restaurants.menu.MenuRepository;
 import com.example.beamo.service.users.UserService;
@@ -52,6 +53,8 @@ public class BasketController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    OrderRepository orderRepository;
 
     MapperForBeamo mapperForBeamo;
 
@@ -72,6 +75,10 @@ public class BasketController {
         }
 
         long u_seq = userService.getUser(request).getSeq();
+
+        if (orderRepository.findByU_seqC_seq(u_seq, c_seq) != null) {
+            return new ResponseEntity<>("이미 결제 되었습니다.", HttpStatus.BAD_REQUEST);
+        }
 
         ChatRoom chatRoom = chatRoomRepository.findByU_seqAndC_I_Seq(u_seq, c_seq);
         Long basket_seq = basketRepository.findByChatRoom(chatRoom).getSeq();
@@ -121,6 +128,11 @@ public class BasketController {
             return new ResponseEntity<>("로그인이 필요합니다.", HttpStatus.UNAUTHORIZED);
         }
         long u_seq = userService.getUser(request).getSeq();
+
+        if (orderRepository.findByU_seqC_seq(u_seq, c_seq) != null) {
+            return ResponseEntity.ok("[]");
+        }
+
         ChatRoom chatRoom = chatRoomRepository.findByU_seqAndC_I_Seq(u_seq, c_seq);
         if (chatRoom == null) {
             return ResponseEntity.badRequest().body("room 이 없어 바구니가 존재하지 않았습니다. 다시 확인해주세요.");
