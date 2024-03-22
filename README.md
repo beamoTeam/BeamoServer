@@ -1,7 +1,5 @@
 # 배모(배달할 사람 다 모여)
 
-## 배포 링크 : [http://www.dobbyteam.com](http://www.dobbyteam.com:3000/)
-
 ## 작동 영상 : [링크](https://www.youtube.com/watch?v=JGtewURwX1c)
 
 ## **배달앱의 배달비와 최소 주문금액으로 인한 과소비 해결을 위한 < "배달비 쉐어 서비스" >**
